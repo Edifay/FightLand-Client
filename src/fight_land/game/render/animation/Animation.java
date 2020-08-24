@@ -43,7 +43,6 @@ public class Animation {
 					this.textureAtModify.setImage(sprites.getNextSprite());
 				}
 			} catch (Exception e) {
-				System.out.println("stopped animation played");
 			}
 		});
 	}

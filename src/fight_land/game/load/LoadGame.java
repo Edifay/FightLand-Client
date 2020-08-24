@@ -72,8 +72,8 @@ public class LoadGame {
 		CollisionsDetector.rectanglesCollisions.add(new Rectangle(3, 336, 525, 17));
 		CollisionsDetector.rectanglesCollisions.add(new Rectangle(1397, 336, 525, 17));
 
-		CollisionsDetector.rectanglesCollisions.add(new Rectangle(3, 781, 660, 21));
-		CollisionsDetector.rectanglesCollisions.add(new Rectangle(1256, 781, 575, 21));
+		CollisionsDetector.rectanglesCollisions.add(new Rectangle(3, 781, 660, 25));
+		CollisionsDetector.rectanglesCollisions.add(new Rectangle(1256, 781, 575, 25));
 
 	}
 }

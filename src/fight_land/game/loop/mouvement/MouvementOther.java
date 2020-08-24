@@ -97,7 +97,7 @@ public class MouvementOther {
 
 	private void mouvementAxeY(double timeWaited, Boolean collisionResult) {
 		if (this.forceY < 0 || !collisionResult) {
-			if (this.forceY < maxSpeedUp * timeWaited) {
+			if (this.forceY < maxSpeedUp) {
 				this.forceY += atAddUp * timeWaited;
 			}
 		} else {

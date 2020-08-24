@@ -9,7 +9,7 @@ public class Mouvement {
 	private final double maxSpeed = 1;
 	private final double atAdd = 0.1;
 
-	private final double maxSpeedUp = 2;
+	private final double maxSpeedUp = 5;
 	private final double atAddUp = 0.01;
 	private final double JumpForce = 3.5;
 
@@ -59,7 +59,6 @@ public class Mouvement {
 				}
 				timeWaited = System.nanoTime() - timeWaited;
 				timeWaited = timeWaited / 1000000;
-				System.out.println("time waited : " + timeWaited);
 
 				if (timeWaited <= 4) {
 					allMovementAndHideBox(timeWaited);
@@ -97,11 +96,31 @@ public class Mouvement {
 	}
 
 	private void mouvementAxeY(double timeWaited, Boolean collisionResult) {
-		if (this.forceY < 0 || !collisionResult) {
-			if (this.forceY < maxSpeedUp * timeWaited) {
+		if ((this.forceY < 0 || !collisionResult)) {
+			if (this.forceY < maxSpeedUp && !this.game.getDOWN()) {
+				this.forceY += atAddUp * timeWaited;
+			} else if(CollisionsDetector.isThisTextureTouchGravity(this.animationManager.getTexture())){
+				int i;
+				for (i = 0; i < 20; i++) {
+					this.animationManager.getTexture().setLocation(
+							this.animationManager.getTexture().getLocation().getX(),
+							this.animationManager.getTexture().getLocation().getY() + 1);
+					if (!CollisionsDetector.isThisTextureTouchGravity(this.animationManager.getTexture())) {
+						System.out.println("plus en collision : " + i);
+						break;
+					}
+				}
+				if (CollisionsDetector.isThisTextureTouchGravity(this.animationManager.getTexture())) {
+					System.out.println("touche encore");
+					this.animationManager.getTexture().setLocation(
+							this.animationManager.getTexture().getLocation().getX(),
+							this.animationManager.getTexture().getLocation().getY() - i);
+				}
+			}else {
 				this.forceY += atAddUp * timeWaited;
 			}
 		} else {
+
 			while (true) {// put at the top of the hidebox for delete hidebox problem
 				this.animationManager.getTexture().setLocation(this.animationManager.getTexture().getLocation().getX(),
 						this.animationManager.getTexture().getLocation().getY() - 1);
