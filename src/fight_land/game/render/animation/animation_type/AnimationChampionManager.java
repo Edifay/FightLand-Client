@@ -1,0 +1,78 @@
+package fight_land.game.render.animation.animation_type;
+
+import java.util.ArrayList;
+
+import fight_land.game.render.GraphicsRender;
+import fight_land.game.render.animation.Animation;
+import fight_land.game.render.animation.AnimationManager;
+import fight_land.game.render.graphics.Sprites;
+import fight_land.game.render.graphics.Texture;
+
+public abstract class AnimationChampionManager extends AnimationManager {
+	
+	public static final Boolean RIGHT = true;
+	public static final Boolean LEFT = false;
+
+	private ArrayList<Sprites> sprites;
+
+	@SuppressWarnings("unchecked")
+	public AnimationChampionManager(GraphicsRender render, Texture texture, ArrayList<Sprites> sprites) {
+		super(render, texture);
+		this.sprites = (ArrayList<Sprites>) sprites.clone();
+		for(int i = 0; i < this.sprites.size();i++) {
+			this.sprites.set(i, this.sprites.get(i).clone());
+		}
+	}
+
+	public synchronized void stand() {
+		super.stopActualAnimation();
+		this.setAnimationState(0);
+		resize(0);
+		if(this.texture.getRightOrLeft()) {
+			this.animationRunning = new Animation(this.sprites.get(0), this.texture, 25);
+			this.animationRunning.start();
+		}else {
+			this.animationRunning = new Animation(this.sprites.get(1), this.texture, 25);
+			this.animationRunning.start();
+		}
+	}
+	
+	public synchronized void walk() {
+		super.stopActualAnimation();
+		resize(2);
+		if(this.texture.getRightOrLeft()) {
+			this.sprites.get(2).resetSprite();
+			this.setAnimationState(2);
+			this.animationRunning = new Animation(this.sprites.get(2), this.texture, 25);
+			this.animationRunning.start();
+		}else {
+			this.sprites.get(3).resetSprite();
+			this.setAnimationState(3);
+			this.animationRunning = new Animation(this.sprites.get(3), this.texture, 25);
+			this.animationRunning.start();
+		}
+	}
+	
+	public synchronized void fall() {
+		super.stopActualAnimation();
+		resize(4);
+		if(this.texture.getRightOrLeft()) {
+			this.sprites.get(4).resetSprite();
+			this.setAnimationState(4);
+			this.animationRunning = new Animation(this.sprites.get(4), this.texture, 5);
+			this.animationRunning.start();
+		}else {
+			this.sprites.get(5).resetSprite();
+			this.setAnimationState(5);
+			this.animationRunning = new Animation(this.sprites.get(5), this.texture, 5);
+			this.animationRunning.start();
+		}
+	}
+	
+	private void resize(int nbTexture) {
+		float atall = (float) (this.texture.getLocation().getY()+this.texture.getSize().getHeight());
+		float midle = (float) (this.texture.getLocation().getX()+(this.texture.getSize().getWidth()/2));
+		this.forceSetLocation(midle-(this.sprites.get(nbTexture).getActualSprite().getWidth()/2), atall-this.sprites.get(nbTexture).getActualSprite().getHeight());
+		this.forceSetSize(this.sprites.get(nbTexture).getActualSprite().getWidth(), this.sprites.get(nbTexture).getActualSprite().getHeight());
+	}
+}
