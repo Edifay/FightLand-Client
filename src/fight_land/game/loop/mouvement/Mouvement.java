@@ -67,10 +67,10 @@ public class Mouvement {
 					double actual_time_waited = 0;
 					while (timeWaited != actual_time_waited) {
 						actual_time_waited += 4;
-						if(actual_time_waited > timeWaited) {
-							allMovementAndHideBox(timeWaited%(actual_time_waited-4));
+						if (actual_time_waited > timeWaited) {
+							allMovementAndHideBox(timeWaited % (actual_time_waited - 4));
 							actual_time_waited = timeWaited;
-						}else {
+						} else {
 							allMovementAndHideBox(4);
 						}
 					}
