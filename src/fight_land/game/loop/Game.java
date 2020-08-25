@@ -49,7 +49,7 @@ public class Game {
 		this.animationManagerForActualPlayer.forceSetSize(135, 194);
 		this.animationManagerForActualPlayer.setVisible(true);
 		this.animationManagerForActualPlayer.setAnimationState(0);
-		this.animationManagerForActualPlayer.stand();
+		this.animationManagerForActualPlayer.stand(true);
 		
 		new MouvementOther(this, this.animationManagerForActualPlayer).start();
 
@@ -59,7 +59,7 @@ public class Game {
 		this.animationManagerForActualPlayer.forceSetSize(135, 194);
 		this.animationManagerForActualPlayer.setVisible(true);
 		this.animationManagerForActualPlayer.setAnimationState(0);
-		this.animationManagerForActualPlayer.stand();
+		this.animationManagerForActualPlayer.stand(true);
 
 		this.mouvementActual_Player = new Mouvement(this, this.animationManagerForActualPlayer);
 		this.mouvementActual_Player.start();

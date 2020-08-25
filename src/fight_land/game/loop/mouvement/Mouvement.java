@@ -7,6 +7,13 @@ import fight_land.game.render.graphics.Texture;
 
 public class Mouvement {
 
+	private Boolean attackPossible = true;
+	private int dashNumber = 2;
+	private Boolean resetDash = false;
+
+	private Boolean moveX = true;
+	private Boolean moveY = true;
+
 	private final double maxSpeed = 1;
 	private final double atAdd = 0.1;
 
@@ -46,6 +53,7 @@ public class Mouvement {
 			double timeWaited;
 			this.forceX = 0;
 			this.forceY = 0;
+
 			while (true) {
 
 				if (this.animationManager.getTextureY() > 1080) {
@@ -60,12 +68,37 @@ public class Mouvement {
 				}
 				timeWaited = System.nanoTime() - timeWaited;
 				timeWaited = timeWaited / 1000000;
+
+				// ALL Action
+
+				if (this.game.getROULADE() && dashNumber < 0 && this.resetDash) {// time dash and double dash
+					this.animationManager.roulade(true);
+					this.resetDash = false;
+					new Thread(()->{
+						try {
+							Thread.sleep(20);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						this.resetDash = true;
+					}).start();
+				}
 				
-				if(this.game.getROULADE()) {
-					this.animationManager.roulade();
+				if (this.game.getOtherDOWN() && this.moveX && this.attackPossible) {
+					this.animationManager.attack1WithOutSleep(this, false);
+					this.moveX = false;
+					this.attackPossible = false;
+					new Thread(() -> {
+						try {
+							Thread.sleep(720);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						this.attackPossible = true;
+					}).start();
 				}
 
-				if (timeWaited <= 4) {
+				if (timeWaited <= 4) {// don't skip too much px
 					allMovementAndHideBox(timeWaited);
 				} else {
 					double actual_time_waited = 0;
@@ -92,8 +125,12 @@ public class Mouvement {
 			collisionResult = false;
 		}
 
-		mouvementAxeX(timeWaited);
-		mouvementAxeY(timeWaited, collisionResult);
+		if (this.moveX) {
+			mouvementAxeX(timeWaited);
+		}
+		if (this.moveY) {
+			mouvementAxeY(timeWaited, collisionResult);
+		}
 
 		this.animationManager.forceSetLocation(
 				(float) (this.animationManager.getTextureX() + (this.forceX * timeWaited)),
@@ -163,12 +200,12 @@ public class Mouvement {
 		if (collisionResult) {
 			if (this.animationManager.getAnimationState() != 3) {
 				this.animationManager.setFlip(false);
-				this.animationManager.walk();
+				this.animationManager.walk(true);
 			}
 		} else {
 			if (this.animationManager.getAnimationState() != 5) {
 				this.animationManager.setFlip(false);
-				this.animationManager.fall();
+				this.animationManager.fall(true);
 			}
 		}
 		if (this.forceX > -maxSpeed) {
@@ -182,12 +219,12 @@ public class Mouvement {
 		if (collisionResult) {
 			if (this.animationManager.getAnimationState() != 2) {
 				this.animationManager.setFlip(true);
-				this.animationManager.walk();
+				this.animationManager.walk(true);
 			}
 		} else {
 			if (this.animationManager.getAnimationState() != 4) {
 				this.animationManager.setFlip(true);
-				this.animationManager.fall();
+				this.animationManager.fall(true);
 			}
 		}
 		if (this.forceX < maxSpeed) {
@@ -200,11 +237,11 @@ public class Mouvement {
 	private void put0AtForce(double timeWaited, Boolean collisionResult) {
 		if (collisionResult) {
 			if (this.animationManager.getAnimationState() != 0) {
-				this.animationManager.stand();
+				this.animationManager.stand(true);
 			}
 		} else {
 			if (this.animationManager.getAnimationState() != 4 && this.animationManager.getAnimationState() != 5) {
-				this.animationManager.fall();
+				this.animationManager.fall(true);
 			}
 		}
 		if (this.forceX > atAdd * timeWaited) {
@@ -217,4 +254,29 @@ public class Mouvement {
 			this.forceX = 0;
 		}
 	}
+
+	public synchronized Boolean getAttackPossible() {
+		return this.attackPossible;
+	}
+
+	public synchronized void setAttackPossible(Boolean attackPossible) {
+		this.attackPossible = attackPossible;
+	}
+
+	public synchronized Boolean getMoveX() {
+		return this.moveX;
+	}
+
+	public synchronized void setMoveX(Boolean moveX) {
+		this.moveX = moveX;
+	}
+
+	public synchronized Boolean getMoveY() {
+		return this.moveY;
+	}
+
+	public synchronized void setMoveY(Boolean moveY) {
+		this.moveY = moveY;
+	}
+
 }

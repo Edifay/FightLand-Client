@@ -62,7 +62,7 @@ public class MouvementOther {
 				timeWaited = timeWaited / 1000000;
 				
 				if(this.game.getOtherROULADE()) {
-					this.animationManager.roulade();
+					this.animationManager.roulade(true);
 				}
 
 				if (timeWaited <= 4) {
@@ -163,12 +163,12 @@ public class MouvementOther {
 		if (collisionResult) {
 			if (this.animationManager.getAnimationState() != 3) {
 				this.animationManager.setFlip(false);
-				this.animationManager.walk();
+				this.animationManager.walk(true);
 			}
 		} else {
 			if (this.animationManager.getAnimationState() != 5) {
 				this.animationManager.setFlip(false);
-				this.animationManager.fall();
+				this.animationManager.fall(true);
 			}
 		}
 		if (this.forceX > -maxSpeed) {
@@ -182,12 +182,12 @@ public class MouvementOther {
 		if (collisionResult) {
 			if (this.animationManager.getAnimationState() != 2) {
 				this.animationManager.setFlip(true);
-				this.animationManager.walk();
+				this.animationManager.walk(true);
 			}
 		} else {
 			if (this.animationManager.getAnimationState() != 4) {
 				this.animationManager.setFlip(true);
-				this.animationManager.fall();
+				this.animationManager.fall(true);
 			}
 		}
 		if (this.forceX < maxSpeed) {
@@ -200,11 +200,11 @@ public class MouvementOther {
 	private void put0AtForce(double timeWaited, Boolean collisionResult) {
 		if (collisionResult) {
 			if (this.animationManager.getAnimationState() != 0) {
-				this.animationManager.stand();
+				this.animationManager.stand(true);
 			}
 		} else {
 			if (this.animationManager.getAnimationState() != 4 && this.animationManager.getAnimationState() != 5) {
-				this.animationManager.fall();
+				this.animationManager.fall(true);
 			}
 		}
 		if (this.forceX > atAdd * timeWaited) {
