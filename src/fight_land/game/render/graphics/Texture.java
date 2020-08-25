@@ -58,4 +58,11 @@ public class Texture {
 	public void setRightOrLeft(Boolean rightOrLeft) {
 		this.RightOrLeft = rightOrLeft;
 	}
+	
+	public Texture cloneBound() {
+		Texture text = new Texture();
+		text.setLocation(this.getLocation());
+		text.setSize(this.getSize());
+		return text;
+	}
 }

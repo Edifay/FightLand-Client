@@ -3,6 +3,7 @@ package fight_land.game.loop.mouvement;
 import fight_land.game.loop.Game;
 import fight_land.game.render.animation.animation_type.AnimationChampionManager;
 import fight_land.game.render.collisions.CollisionsDetector;
+import fight_land.game.render.graphics.Texture;
 
 public class Mouvement {
 
@@ -87,7 +88,7 @@ public class Mouvement {
 			collisionResult = false;
 		}
 
-		mouvementAxeX(timeWaited, collisionResult);
+		mouvementAxeX(timeWaited);
 		mouvementAxeY(timeWaited, collisionResult);
 
 		this.animationManager.forceSetLocation(
@@ -99,41 +100,24 @@ public class Mouvement {
 		if ((this.forceY < 0 || !collisionResult)) {
 			if (this.forceY < maxSpeedUp && !this.game.getDOWN()) {
 				this.forceY += atAddUp * timeWaited;
-			} else if(CollisionsDetector.isThisTextureTouchGravity(this.animationManager.getTexture())){
-				int i;
-				for (i = 0; i < 20; i++) {
-					this.animationManager.getTexture().setLocation(
-							this.animationManager.getTexture().getLocation().getX(),
-							this.animationManager.getTexture().getLocation().getY() + 1);
-					if (!CollisionsDetector.isThisTextureTouchGravity(this.animationManager.getTexture())) {
-						System.out.println("plus en collision : " + i);
+			} else if (CollisionsDetector.isThisTextureTouchGravity(this.animationManager.getTexture())) {
+				// traversé toute la plateforme
+				Texture text = this.animationManager.getTexture().cloneBound();
+				for (int i = 0; i < 20; i++) {
+					text.setLocation(text.getLocation().getX(), text.getLocation().getY() + 1);
+					if (!CollisionsDetector.isThisTextureTouchGravity(text)) {
+						this.animationManager.forceSetLocation(text.getLocation().getX(), text.getLocation().getY());
 						break;
 					}
 				}
 				if (CollisionsDetector.isThisTextureTouchGravity(this.animationManager.getTexture())) {
-					System.out.println("touche encore");
-					this.animationManager.getTexture().setLocation(
-							this.animationManager.getTexture().getLocation().getX(),
-							this.animationManager.getTexture().getLocation().getY() - i);
+					putToHideBox();
 				}
-			}else {
+			} else {
 				this.forceY += atAddUp * timeWaited;
 			}
 		} else {
-
-			while (true) {// put at the top of the hidebox for delete hidebox problem
-				this.animationManager.getTexture().setLocation(this.animationManager.getTexture().getLocation().getX(),
-						this.animationManager.getTexture().getLocation().getY() - 1);
-				if (!CollisionsDetector.isThisTextureTouchGravity(this.animationManager.getTexture())) {
-					this.animationManager.getTexture().setLocation(
-							this.animationManager.getTexture().getLocation().getX(),
-							this.animationManager.getTexture().getLocation().getY() + 1);
-					break;
-				}
-			}
-			this.forceY = 0;
-			this.animationManager.forceSetLocation((this.animationManager.getTextureX()),
-					(int) (this.animationManager.getTextureY()));
+			putToHideBox();
 		}
 
 		if (this.game.getJUMP() && collisionResult) {
@@ -141,7 +125,25 @@ public class Mouvement {
 		}
 	}
 
-	private void mouvementAxeX(double timeWaited, Boolean collisionResult) {
+	private void putToHideBox() {
+		Texture textureCloned = this.animationManager.getTexture().cloneBound();
+		int i = 0;
+		while (true) {// put at the top of the hidebox for delete hidebox problem
+			i++;
+			textureCloned.setLocation(textureCloned.getLocation().getX(), textureCloned.getLocation().getY() - 1);
+			if (!CollisionsDetector.isThisTextureTouchGravity(textureCloned)) {
+				this.animationManager.getTexture().setLocation(this.animationManager.getTexture().getLocation().getX(),
+						this.animationManager.getTexture().getLocation().getY() - (i - 1));
+				break;
+			}
+		}
+		this.forceY = 0;
+		this.animationManager.forceSetLocation((this.animationManager.getTextureX()),
+				(int) (this.animationManager.getTextureY()));
+	}
+
+	private void mouvementAxeX(double timeWaited) {
+		Boolean collisionResult = CollisionsDetector.isThisTextureTouchGravity(this.animationManager.getTexture());
 		if (game.getLEFT() && game.getRIGHT()) {
 			put0AtForce(timeWaited, collisionResult);
 		} else if (game.getLEFT()) {

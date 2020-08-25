@@ -54,6 +54,7 @@ public class GraphicsRender {
 	}
 
 	public synchronized void setLocationTexture(Texture texture, float x, float y) {
+		this.tMove = new Thread();
 		texture.setLocation(x, y);
 	}
 

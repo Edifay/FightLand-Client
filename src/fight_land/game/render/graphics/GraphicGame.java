@@ -1,5 +1,6 @@
 package fight_land.game.render.graphics;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -13,6 +14,8 @@ public class GraphicGame extends JPanel {
 
 	private static final long serialVersionUID = 3107928442240797425L;
 
+	public static final Color backgroundColor = new Color(233, 255, 255);
+	
 	private double racio_width;
 	private double racio_height;
 
@@ -43,6 +46,11 @@ public class GraphicGame extends JPanel {
 		 * System.out.println(textures[0]);
 		 */
 
+		g.setColor(backgroundColor);
+		g.fillRect(0, 0, this.getWidth(), this.getHeight());
+		
+		g.setColor(Color.black);
+		
 		for (Texture texture : textures) {
 			g.drawImage(texture.getImage(), (int) (texture.getLocation().getX() * this.racio_width),
 					(int) (texture.getLocation().getY() * this.racio_height),
