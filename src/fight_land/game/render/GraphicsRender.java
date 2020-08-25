@@ -67,54 +67,54 @@ public class GraphicsRender {
 		texture.setSize(width, height);
 	}
 
-	public void moveTexture(Texture texture, double x, double y, int timeToGo) {
-		if (this.tMove == null) {
-
-		} else if (this.tMove.isAlive()) {
-		}
-		setThreadMove(texture, x, y, timeToGo);
+	public void moveTexture(Texture texture, double x, double y, int timeToGo, Boolean stoppable) {
+		setThreadMove(texture, x, y, timeToGo, stoppable);
 		this.tMove.start();
 	}
 
-	private void setThreadMove(Texture texture, double x, double y, int timeToGo) {
+	private void setThreadMove(Texture texture, double x, double y, int timeToGo, Boolean stoppable) {
 		this.tMove = new Thread(() -> {
-			int firstPointX = (int) texture.getLocation().getX();
-			int firstPointY = (int) texture.getLocation().getY();
-			Point vector = new Point((int) (x - texture.getLocation().getX()),
-					(int) (y - texture.getLocation().getY()));
-
-			double distance = Math.sqrt(
-					((vector.getX() - texture.getLocation().getX()) * (vector.getX() - texture.getLocation().getX()))
-							+ ((vector.getY() - texture.getLocation().getY())
-									* (vector.getY() - texture.getLocation().getY())));
-
-			int distanceX = (int) (x - texture.getLocation().getX());
-			double pas = distanceX / distance;
-			double racio_vec = vector.getY() / vector.getX();
-			double time = (timeToGo / distance);
-
-			double endTime = System.currentTimeMillis() + (timeToGo);
-
-			for (int i = 0; i < distance + 1; i++) {
-				if (this.tMove != Thread.currentThread()) {// if the Thread is always the actualmove
-					break;
-				}
-
-				double tempsRestant = endTime - System.currentTimeMillis();
-				i = (int) ((timeToGo - tempsRestant) / time);
-
-				this.setLocationTexture(texture, (float) (firstPointX + (pas * i)),
-						(float) (firstPointY + ((pas * i) * racio_vec)));
-				try {
-					Thread.sleep(1);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
+			contentThread(texture, x, y, timeToGo, stoppable);
 		});
 	}
 
 	public Boolean containt(Texture texture) {
 		return this.allTextures.contains(texture);
+	}
+
+	public void contentThread(Texture texture, double x, double y, int timeToGo, Boolean stoppable) {
+		int firstPointX = (int) texture.getLocation().getX();
+		int firstPointY = (int) texture.getLocation().getY();
+		Point vector = new Point((int) (x - texture.getLocation().getX()), (int) (y - texture.getLocation().getY()));
+
+		double distance = Math.sqrt(((vector.getX() - texture.getLocation().getX())
+				* (vector.getX() - texture.getLocation().getX()))
+				+ ((vector.getY() - texture.getLocation().getY()) * (vector.getY() - texture.getLocation().getY())));
+
+		int distanceX = (int) (x - texture.getLocation().getX());
+		double pas = distanceX / distance;
+		double racio_vec = vector.getY() / vector.getX();
+		double time = (timeToGo / distance);
+
+		double endTime = System.currentTimeMillis() + (timeToGo);
+
+		for (int i = 0; i < distance + 1; i++) {
+			if (stoppable) {
+				if (this.tMove != Thread.currentThread()) {// if the Thread is always the actualmove
+					break;
+				}
+			}
+
+			double tempsRestant = endTime - System.currentTimeMillis();
+			i = (int) ((timeToGo - tempsRestant) / time);
+
+			texture.setLocation((float) (firstPointX + (pas * i)), (float) (firstPointY + ((pas * i) * racio_vec)));
+
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

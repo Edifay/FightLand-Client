@@ -3,15 +3,16 @@ package fight_land.game.loop.mouvement;
 import fight_land.game.loop.Game;
 import fight_land.game.render.animation.animation_type.AnimationChampionManager;
 import fight_land.game.render.collisions.CollisionsDetector;
+import fight_land.game.render.graphics.Texture;
 
 public class MouvementOther {
 
 	private final double maxSpeed = 1;
 	private final double atAdd = 0.1;
 
-	private final double maxSpeedUp = 2;
+	private final double maxSpeedUp = 5;
 	private final double atAddUp = 0.01;
-	private final double JumpForce = 2.5;
+	private final double JumpForce = 3.5;
 
 	private AnimationChampionManager animationManager;
 	private Game game;
@@ -45,13 +46,12 @@ public class MouvementOther {
 			double timeWaited;
 			this.forceX = 0;
 			this.forceY = 0;
-
 			while (true) {
-				
-				if(this.animationManager.getTextureY() > 1080) {
+
+				if (this.animationManager.getTextureY() > 1080) {
 					this.animationManager.forceSetLocation(20, 20);
 				}
-				
+
 				timeWaited = System.nanoTime();
 				try {
 					Thread.sleep(1);
@@ -60,6 +60,10 @@ public class MouvementOther {
 				}
 				timeWaited = System.nanoTime() - timeWaited;
 				timeWaited = timeWaited / 1000000;
+				
+				if(this.game.getOtherROULADE()) {
+					this.animationManager.roulade();
+				}
 
 				if (timeWaited <= 4) {
 					allMovementAndHideBox(timeWaited);
@@ -67,14 +71,15 @@ public class MouvementOther {
 					double actual_time_waited = 0;
 					while (timeWaited != actual_time_waited) {
 						actual_time_waited += 4;
-						if(actual_time_waited > timeWaited) {
-							allMovementAndHideBox(timeWaited%(actual_time_waited-4));
+						if (actual_time_waited > timeWaited) {
+							allMovementAndHideBox(timeWaited % (actual_time_waited - 4));
 							actual_time_waited = timeWaited;
-						}else {
+						} else {
 							allMovementAndHideBox(4);
 						}
 					}
 				}
+
 			}
 		});
 	}
@@ -87,7 +92,7 @@ public class MouvementOther {
 			collisionResult = false;
 		}
 
-		mouvementAxeX(timeWaited, collisionResult);
+		mouvementAxeX(timeWaited);
 		mouvementAxeY(timeWaited, collisionResult);
 
 		this.animationManager.forceSetLocation(
@@ -96,24 +101,27 @@ public class MouvementOther {
 	}
 
 	private void mouvementAxeY(double timeWaited, Boolean collisionResult) {
-		if (this.forceY < 0 || !collisionResult) {
-			if (this.forceY < maxSpeedUp) {
+		if ((this.forceY < 0 || !collisionResult)) {
+			if (this.forceY < maxSpeedUp && !this.game.getOtherDOWN()) {
+				this.forceY += atAddUp * timeWaited;
+			} else if (CollisionsDetector.isThisTextureTouchGravity(this.animationManager.getTexture())) {
+				// traversé toute la plateforme
+				Texture text = this.animationManager.getTexture().cloneBound();
+				for (int i = 0; i < 20; i++) {
+					text.setLocation(text.getLocation().getX(), text.getLocation().getY() + 1);
+					if (!CollisionsDetector.isThisTextureTouchGravity(text)) {
+						this.animationManager.forceSetLocation(text.getLocation().getX(), text.getLocation().getY());
+						break;
+					}
+				}
+				if (CollisionsDetector.isThisTextureTouchGravity(this.animationManager.getTexture())) {
+					putToHideBox();
+				}
+			} else {
 				this.forceY += atAddUp * timeWaited;
 			}
 		} else {
-			while (true) {// put at the top of the hidebox for delete hidebox problem
-				this.animationManager.getTexture().setLocation(this.animationManager.getTexture().getLocation().getX(),
-						this.animationManager.getTexture().getLocation().getY() - 1);
-				if (!CollisionsDetector.isThisTextureTouchGravity(this.animationManager.getTexture())) {
-					this.animationManager.getTexture().setLocation(
-							this.animationManager.getTexture().getLocation().getX(),
-							this.animationManager.getTexture().getLocation().getY() + 1);
-					break;
-				}
-			}
-			this.forceY = 0;
-			this.animationManager.forceSetLocation((this.animationManager.getTextureX()),
-					(int) (this.animationManager.getTextureY()));
+			putToHideBox();
 		}
 
 		if (this.game.getOtherJUMP() && collisionResult) {
@@ -121,12 +129,30 @@ public class MouvementOther {
 		}
 	}
 
-	private void mouvementAxeX(double timeWaited, Boolean collisionResult) {
-		if (game.getOtherLEFT() && game.getOtherRIGHT()) {
+	private void putToHideBox() {
+		Texture textureCloned = this.animationManager.getTexture().cloneBound();
+		int i = 0;
+		while (true) {// put at the top of the hidebox for delete hidebox problem
+			i++;
+			textureCloned.setLocation(textureCloned.getLocation().getX(), textureCloned.getLocation().getY() - 1);
+			if (!CollisionsDetector.isThisTextureTouchGravity(textureCloned)) {
+				this.animationManager.getTexture().setLocation(this.animationManager.getTexture().getLocation().getX(),
+						this.animationManager.getTexture().getLocation().getY() - (i - 1));
+				break;
+			}
+		}
+		this.forceY = 0;
+		this.animationManager.forceSetLocation((this.animationManager.getTextureX()),
+				(int) (this.animationManager.getTextureY()));
+	}
+
+	private void mouvementAxeX(double timeWaited) {
+		Boolean collisionResult = CollisionsDetector.isThisTextureTouchGravity(this.animationManager.getTexture());
+		if (this.game.getOtherLEFT() && this.game.getOtherRIGHT()) {
 			put0AtForce(timeWaited, collisionResult);
-		} else if (game.getOtherRIGHT()) {
+		} else if (this.game.getOtherRIGHT()) {
 			setLeftForce(timeWaited, collisionResult);
-		} else if (game.getOtherLEFT()) {
+		} else if (this.game.getOtherLEFT()) {
 			setRightForce(timeWaited, collisionResult);
 		} else {// ramener la force à 0
 			put0AtForce(timeWaited, collisionResult);

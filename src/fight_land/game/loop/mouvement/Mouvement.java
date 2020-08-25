@@ -60,6 +60,10 @@ public class Mouvement {
 				}
 				timeWaited = System.nanoTime() - timeWaited;
 				timeWaited = timeWaited / 1000000;
+				
+				if(this.game.getROULADE()) {
+					this.animationManager.roulade();
+				}
 
 				if (timeWaited <= 4) {
 					allMovementAndHideBox(timeWaited);

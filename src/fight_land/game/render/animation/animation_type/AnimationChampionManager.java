@@ -69,6 +69,24 @@ public abstract class AnimationChampionManager extends AnimationManager {
 		}
 	}
 	
+	public synchronized void roulade() {
+		super.stopActualAnimation();
+		resize(6);
+		if(this.texture.getRightOrLeft()) {
+			this.sprites.get(6).resetSprite();
+			this.setAnimationState(6);
+			this.animationRunning = new Animation(this.sprites.get(6), this.texture, 3);
+			this.animationRunning.start();
+			this.render.contentThread(this.texture, this.getTextureX()+400, this.getTextureY(), 120, false);
+		}else {
+			this.sprites.get(7).resetSprite();
+			this.setAnimationState(7);
+			this.animationRunning = new Animation(this.sprites.get(7), this.texture, 3);
+			this.animationRunning.start();
+			this.render.contentThread(this.texture, this.getTextureX()-400, this.getTextureY(), 120, false);
+		}
+	}
+	
 	private void resize(int nbTexture) {
 		float atall = (float) (this.texture.getLocation().getY()+this.texture.getSize().getHeight());
 		float midle = (float) (this.texture.getLocation().getX()+(this.texture.getSize().getWidth()/2));

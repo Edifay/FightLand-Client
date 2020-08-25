@@ -60,6 +60,20 @@ public class LoadGame {
 		loaded++;
 
 		assets.getAllPlayersAndSprites().add(sprites1);
+		
+		try {// load roulade right
+			sprites1.add(new Sprites(
+					ImageIO.read(getClass().getResource("/assets/game/champions/champion_1/roulade_cosmo.png")), 274,
+					259));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		loaded++;
+
+		sprites1.add(sprites1.get(6).getSpritesFlip());
+		loaded++;
+
+		assets.getAllPlayersAndSprites().add(sprites1);
 
 		try {// load map 1
 			assets.getMaps().add(ImageIO.read(getClass().getResource("/assets/game/maps/lavaCave/cave_hidebox.png")));

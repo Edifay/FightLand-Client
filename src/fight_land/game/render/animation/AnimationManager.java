@@ -29,8 +29,8 @@ public abstract class AnimationManager {
 		this.render.setSizeTexture(this.texture, width, height);
 	}
 
-	public void forceSetMove(double x, double y, int timeToGo) {
-		this.render.moveTexture(this.texture, x, y, timeToGo);
+	public void forceSetMove(double x, double y, int timeToGo, Boolean stoppable) {
+		this.render.moveTexture(this.texture, x, y, timeToGo, stoppable);
 	}
 
 	public float getTextureX() {
@@ -38,13 +38,13 @@ public abstract class AnimationManager {
 	}
 
 	public float getTextureY() {
-		return  this.texture.getLocation().getY();
+		return this.texture.getLocation().getY();
 	}
 
 	public void setFlip(Boolean rightOrLeft) {
 		this.texture.setRightOrLeft(rightOrLeft);
 	}
-	
+
 	public Boolean isFlip() {
 		return this.texture.getRightOrLeft();
 	}
@@ -64,9 +64,11 @@ public abstract class AnimationManager {
 	public Texture getTexture() {
 		return this.texture;
 	}
+
 	public int getAnimationState() {
 		return this.AnimationState;
 	}
+
 	public void setAnimationState(int state) {
 		this.AnimationState = state;
 	}
