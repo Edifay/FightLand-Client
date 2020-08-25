@@ -24,11 +24,13 @@ public class Game {
 	private Boolean LEFT = false;
 	private Boolean JUMP = false;
 	private Boolean DOWN = false;
+	private Boolean ROULADE = false;
 
 	private Boolean otherRIGHT = false;
 	private Boolean otherLEFT = false;
 	private Boolean otherJUMP = false;
 	private Boolean otherDOWN = false;
+	private Boolean otherROULADE = false;
 
 	public Game(GraphicsRender render) {
 		this.render = render;
@@ -49,7 +51,7 @@ public class Game {
 		this.animationManagerForActualPlayer.setAnimationState(0);
 		this.animationManagerForActualPlayer.stand();
 		
-		new MouvementOther(this, this.animationManagerForActualPlayer).start();;
+		new MouvementOther(this, this.animationManagerForActualPlayer).start();
 
 		this.animationManagerForActualPlayer = new AnimationCosmonaute(this.render, this.actual_player,
 				AssetsContener.assets.getAllPlayersAndSprites().get(0));
@@ -106,6 +108,14 @@ public class Game {
 	public synchronized void setDOWN(Boolean dOWN) {
 		this.DOWN = dOWN;
 	}
+	
+	public Boolean getROULADE() {
+		return this.ROULADE;
+	}
+
+	public void setROULADE(Boolean rOULADE) {
+		ROULADE = rOULADE;
+	}
 
 	public Boolean getOtherRIGHT() {
 		return this.otherRIGHT;
@@ -137,6 +147,14 @@ public class Game {
 
 	public void setOtherDOWN(Boolean otherDOWN) {
 		this.otherDOWN = otherDOWN;
+	}
+
+	public Boolean getOtherROULADE() {
+		return this.otherROULADE;
+	}
+
+	public void setOtherROULADE(Boolean otherROULADE) {
+		this.otherROULADE = otherROULADE;
 	}
 
 }
