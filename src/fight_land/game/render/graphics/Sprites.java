@@ -67,6 +67,9 @@ public class Sprites {
 		return new Sprites(clonedImage);
 	}
 	
+	public int getSpritesNumber() {
+		return this.textures.size();
+	}
 	
 
 }

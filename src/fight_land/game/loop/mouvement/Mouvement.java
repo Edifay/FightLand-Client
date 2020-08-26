@@ -9,7 +9,7 @@ public class Mouvement {
 
 	private Boolean attackPossible = true;
 	private int dashNumber = 2;
-	private Boolean resetDash = false;
+	private Boolean resetDash = true;
 
 	private Boolean moveX = true;
 	private Boolean moveY = true;
@@ -70,13 +70,13 @@ public class Mouvement {
 				timeWaited = timeWaited / 1000000;
 
 				// ALL Action
-
-				if (this.game.getROULADE() && dashNumber < 0 && this.resetDash) {// time dash and double dash
+				if (this.game.getROULADE() && this.dashNumber > 0 && this.resetDash) {// time dash and double dash
 					this.animationManager.roulade(true);
 					this.resetDash = false;
+					this.dashNumber--;
 					new Thread(()->{
 						try {
-							Thread.sleep(20);
+							Thread.sleep(150);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
@@ -84,7 +84,7 @@ public class Mouvement {
 					}).start();
 				}
 				
-				if (this.game.getOtherDOWN() && this.moveX && this.attackPossible) {
+				if (this.game.getATTACK1() && this.moveX && this.attackPossible) {
 					this.animationManager.attack1WithOutSleep(this, false);
 					this.moveX = false;
 					this.attackPossible = false;
@@ -96,6 +96,10 @@ public class Mouvement {
 						}
 						this.attackPossible = true;
 					}).start();
+				}
+				
+				if(this.game.getATTACK3()) {
+					this.animationManager.attack3(false);
 				}
 
 				if (timeWaited <= 4) {// don't skip too much px
@@ -153,12 +157,18 @@ public class Mouvement {
 				}
 				if (CollisionsDetector.isThisTextureTouchGravity(this.animationManager.getTexture())) {
 					putToHideBox();
+					 if(this.dashNumber < 2) {
+						 this.dashNumber = 2;
+					 }
 				}
 			} else {
 				this.forceY += atAddUp * timeWaited;
 			}
 		} else {
 			putToHideBox();
+			 if(this.dashNumber < 2) {
+				 this.dashNumber = 2;
+			 }
 		}
 
 		if (this.game.getJUMP() && collisionResult) {

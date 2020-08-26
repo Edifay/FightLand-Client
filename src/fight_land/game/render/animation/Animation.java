@@ -30,7 +30,7 @@ public class Animation {
 	}
 
 	public void stop() {
-		if (this.tAnimation.isAlive()) {
+		if (this.tAnimation != null && this.tAnimation.isAlive()) {
 			this.tAnimation.interrupt();
 		}
 	}
@@ -47,4 +47,13 @@ public class Animation {
 		});
 	}
 
+	public void startOne() {
+		try {
+			for (int i = 0; i < this.sprites.getSpritesNumber(); i++) {
+				Thread.sleep(this.timeSwap);
+				this.textureAtModify.setImage(sprites.getNextSprite());
+			}
+		} catch (Exception e) {
+		}
+	}
 }

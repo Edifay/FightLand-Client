@@ -56,10 +56,10 @@ public class GraphicGame extends JPanel {
 					(int) (texture.getLocation().getY() * this.racio_height),
 					(int) (texture.getSize().getWidth() * this.racio_width),
 					(int) (texture.getSize().getHeight() * this.racio_height), null);
-			g.drawRect((int) (texture.getLocation().getX() * this.racio_width),
+		/*	g.drawRect((int) (texture.getLocation().getX() * this.racio_width),
 					(int) (texture.getLocation().getY() * this.racio_height),
 					(int) (texture.getSize().getWidth() * this.racio_width),
-					(int) (texture.getSize().getHeight() * this.racio_height));
+					(int) (texture.getSize().getHeight() * this.racio_height));*/
 		}
 	}
 

@@ -14,9 +14,9 @@ public abstract class AnimationChampionManager extends AnimationManager {
 	public static final Boolean RIGHT = true;
 	public static final Boolean LEFT = false;
 
-	private Boolean canBeCancel = true;
+	protected Boolean canBeCancel = true;
 
-	private ArrayList<Sprites> sprites;
+	protected ArrayList<Sprites> sprites;
 
 	@SuppressWarnings("unchecked")
 	public AnimationChampionManager(GraphicsRender render, Texture texture, ArrayList<Sprites> sprites) {
@@ -34,10 +34,10 @@ public abstract class AnimationChampionManager extends AnimationManager {
 			this.setAnimationState(0);
 			resize(0);
 			if (this.texture.getRightOrLeft()) {
-				this.animationRunning = new Animation(this.sprites.get(0), this.texture, 25);
+				this.animationRunning = new Animation(this.sprites.get(0), this.texture, 40);
 				this.animationRunning.start();
 			} else {
-				this.animationRunning = new Animation(this.sprites.get(1), this.texture, 25);
+				this.animationRunning = new Animation(this.sprites.get(1), this.texture, 40);
 				this.animationRunning.start();
 			}
 		}
@@ -142,13 +142,8 @@ public abstract class AnimationChampionManager extends AnimationManager {
 				this.sprites.get(8).resetSprite();
 				this.setAnimationState(8);
 				this.animationRunning = new Animation(this.sprites.get(8), this.texture, 9);
-				this.animationRunning.start();
 				Thread t = new Thread(() -> {
-					try {
-						Thread.sleep(360);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+					this.animationRunning.startOne();
 					mov.setMoveX(true);
 					this.canBeCancel = true;
 				});
@@ -157,13 +152,8 @@ public abstract class AnimationChampionManager extends AnimationManager {
 				this.sprites.get(9).resetSprite();
 				this.setAnimationState(9);
 				this.animationRunning = new Animation(this.sprites.get(9), this.texture, 9);
-				this.animationRunning.start();
 				Thread t = new Thread(() -> {
-					try {
-						Thread.sleep(360);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+					this.animationRunning.startOne();
 					mov.setMoveX(true);
 					this.canBeCancel = true;
 				});
@@ -171,8 +161,31 @@ public abstract class AnimationChampionManager extends AnimationManager {
 			}
 		}
 	}
+	
+	public synchronized void attack2(Boolean canBeCancel) {
+		if (this.canBeCancel) {
+			this.canBeCancel = canBeCancel;
+			super.stopActualAnimation();
+			resize(10);
+			if (this.texture.getRightOrLeft()) {
+				this.sprites.get(10).resetSprite();
+				this.setAnimationState(10);
+				this.animationRunning = new Animation(this.sprites.get(10), this.texture, 3);
+				this.animationRunning.start();
+				this.render.contentThread(this.texture, this.getTextureX() + 400, this.getTextureY(), 120, false);
+			} else {
+				this.sprites.get(11).resetSprite();
+				this.setAnimationState(11);
+				this.animationRunning = new Animation(this.sprites.get(111), this.texture, 3);
+				this.animationRunning.start();
+				this.render.contentThread(this.texture, this.getTextureX() - 400, this.getTextureY(), 120, false);
+			}
+		}
+	}
+	
+	public abstract void attack3(Boolean canBeCancel);
 
-	private void resize(int nbTexture) {
+	protected void resize(int nbTexture) {
 		float atall = (float) (this.texture.getLocation().getY() + this.texture.getSize().getHeight());
 		float midle = (float) (this.texture.getLocation().getX() + (this.texture.getSize().getWidth() / 2));
 		this.forceSetLocation(midle - (this.sprites.get(nbTexture).getActualSprite().getWidth() / 2),

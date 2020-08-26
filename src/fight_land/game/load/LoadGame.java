@@ -23,10 +23,10 @@ public class LoadGame {
 	public void start() {
 		ArrayList<Sprites> sprites1 = new ArrayList<Sprites>();
 
-		try {// load run right
+		try {// load stand right
 			sprites1.add(new Sprites(
-					ImageIO.read(getClass().getResource("/assets/game/champions/champion_1/stand_cosmo.png")), 133,
-					204));
+					ImageIO.read(getClass().getResource("/assets/game/champions/champion_1/stand_cosmo.png")), 171,
+					207));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -86,6 +86,54 @@ public class LoadGame {
 
 		sprites1.add(sprites1.get(8).getSpritesFlip());
 		loaded++;
+		
+		try {// load cosmo moon right
+			sprites1.add(new Sprites(
+					ImageIO.read(getClass().getResource("/assets/game/champions/champion_1/moon_cosmo.png")), 132,
+					206));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		loaded++;
+
+		sprites1.add(sprites1.get(10).getSpritesFlip());
+		loaded++;
+		
+		try {// load moon right
+			sprites1.add(new Sprites(
+					ImageIO.read(getClass().getResource("/assets/game/champions/champion_1/moon_anim.png")), 98,
+					90));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		loaded++;
+
+		sprites1.add(sprites1.get(12).getSpritesFlip());
+		loaded++;
+		
+		try {// load cosmo fuze right
+			sprites1.add(new Sprites(
+					ImageIO.read(getClass().getResource("/assets/game/champions/champion_1/fuze_cosmo.png")), 185,
+					259));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		loaded++;
+
+		sprites1.add(sprites1.get(14).getSpritesFlip());
+		loaded++;
+		
+		try {// load fuse right
+			sprites1.add(new Sprites(
+					ImageIO.read(getClass().getResource("/assets/game/champions/champion_1/fuze_anim.png")), 380,
+					360));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		loaded++;
+
+		sprites1.add(sprites1.get(16).getSpritesFlip());
+		loaded++;
 
 		assets.getAllPlayersAndSprites().add(sprites1);
 
@@ -95,6 +143,9 @@ public class LoadGame {
 			e.printStackTrace();
 		}
 		loaded++;
+		
+		
+		
 
 		CollisionsDetector.rectanglesCollisions = new ArrayList<Rectangle>();
 		CollisionsDetector.rectanglesCollisions.add(new Rectangle(3, 336, 525, 17));

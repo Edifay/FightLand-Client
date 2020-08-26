@@ -25,6 +25,9 @@ public class Game {
 	private Boolean JUMP = false;
 	private Boolean DOWN = false;
 	private Boolean ROULADE = false;
+	private Boolean ATTACK1 = false;
+	private Boolean ATTACK2 = false;
+	private Boolean SPECIAL = false;
 
 	private Boolean otherRIGHT = false;
 	private Boolean otherLEFT = false;
@@ -42,7 +45,7 @@ public class Game {
 		AnimationMapManager mapAnimation = new AnimationLavaMapManager(this.render, new Texture(),
 				AssetsContener.assets.getMaps().get(0));
 		mapAnimation.setVisible(true);
-		
+
 		this.animationManagerForActualPlayer = new AnimationCosmonaute(this.render, new Texture(),
 				AssetsContener.assets.getAllPlayersAndSprites().get(0));
 		this.animationManagerForActualPlayer.forceSetLocation(600, 100);
@@ -50,7 +53,7 @@ public class Game {
 		this.animationManagerForActualPlayer.setVisible(true);
 		this.animationManagerForActualPlayer.setAnimationState(0);
 		this.animationManagerForActualPlayer.stand(true);
-		
+
 		new MouvementOther(this, this.animationManagerForActualPlayer).start();
 
 		this.animationManagerForActualPlayer = new AnimationCosmonaute(this.render, this.actual_player,
@@ -63,7 +66,7 @@ public class Game {
 
 		this.mouvementActual_Player = new Mouvement(this, this.animationManagerForActualPlayer);
 		this.mouvementActual_Player.start();
-		
+
 		// ADD listeners
 		GameListeners gameListeners = new GameListeners(this);
 		frame.addKeyListener(gameListeners);
@@ -108,13 +111,37 @@ public class Game {
 	public synchronized void setDOWN(Boolean dOWN) {
 		this.DOWN = dOWN;
 	}
-	
+
 	public Boolean getROULADE() {
 		return this.ROULADE;
 	}
 
 	public void setROULADE(Boolean rOULADE) {
 		ROULADE = rOULADE;
+	}
+
+	public Boolean getATTACK1() {
+		return this.ATTACK1;
+	}
+
+	public void setATTACK1(Boolean aTTACK1) {
+		ATTACK1 = aTTACK1;
+	}
+
+	public Boolean getATTACK2() {
+		return this.ATTACK2;
+	}
+
+	public void setATTACK2(Boolean aTTACK2) {
+		ATTACK2 = aTTACK2;
+	}
+
+	public Boolean getATTACK3() {
+		return this.SPECIAL;
+	}
+
+	public void setATTACK3(Boolean aTTACK3) {
+		SPECIAL = aTTACK3;
 	}
 
 	public Boolean getOtherRIGHT() {
