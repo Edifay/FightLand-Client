@@ -18,9 +18,9 @@ public class AnimationCosmonaute extends AnimationChampionManager {
 		if (this.canBeCancel) {
 			this.canBeCancel = canBeCancel;
 			super.stopActualAnimation();
-			resize(14);
 			if (this.texture.getRightOrLeft()) {
 				this.sprites.get(14).resetSprite();
+				resize(14);
 				this.setAnimationState(14);
 				this.animationRunning = new Animation(this.sprites.get(14), this.texture, 15);
 				new Thread(() -> {
@@ -45,6 +45,7 @@ public class AnimationCosmonaute extends AnimationChampionManager {
 				this.canBeCancel = true;
 			} else {
 				this.sprites.get(15).resetSprite();
+				resize(15);
 				this.setAnimationState(15);
 				this.animationRunning = new Animation(this.sprites.get(15), this.texture, 15);
 				new Thread(() -> {
@@ -80,7 +81,6 @@ public class AnimationCosmonaute extends AnimationChampionManager {
 		if (this.canBeCancel) {
 			this.canBeCancel = canBeCancel;
 			super.stopActualAnimation();
-			resize(10);
 			if (this.texture.getRightOrLeft()) {
 				Texture moon = new Texture();
 				moon.setSize(this.sprites.get(12).getActualSprite().getWidth(),
@@ -95,6 +95,7 @@ public class AnimationCosmonaute extends AnimationChampionManager {
 					e.printStackTrace();
 				}
 				this.sprites.get(10).resetSprite();
+				resize(10);
 				this.setAnimationState(10);
 				this.animationRunning = new Animation(this.sprites.get(10), this.texture, 6);
 				new Thread(() -> {
@@ -104,10 +105,6 @@ public class AnimationCosmonaute extends AnimationChampionManager {
 				this.animationRunning.startOne();
 				this.canBeCancel = true;
 			} else {
-				this.sprites.get(11).resetSprite();
-				this.setAnimationState(11);
-				this.animationRunning = new Animation(this.sprites.get(11), this.texture, 6);
-				this.animationRunning.startOne();
 				this.canBeCancel = true;
 			}
 		}

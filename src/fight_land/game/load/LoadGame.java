@@ -89,8 +89,8 @@ public class LoadGame {
 		
 		try {// load cosmo moon right
 			sprites1.add(new Sprites(
-					ImageIO.read(getClass().getResource("/assets/game/champions/champion_1/moon_cosmo.png")), 132,
-					206));
+					ImageIO.read(getClass().getResource("/assets/game/champions/champion_1/moon_cosmo.png")), 171,
+					216));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
