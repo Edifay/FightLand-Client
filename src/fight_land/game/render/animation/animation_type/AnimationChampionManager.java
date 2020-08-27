@@ -161,28 +161,9 @@ public abstract class AnimationChampionManager extends AnimationManager {
 			}
 		}
 	}
-	
-	public synchronized void attack2(Boolean canBeCancel) {
-		if (this.canBeCancel) {
-			this.canBeCancel = canBeCancel;
-			super.stopActualAnimation();
-			resize(10);
-			if (this.texture.getRightOrLeft()) {
-				this.sprites.get(10).resetSprite();
-				this.setAnimationState(10);
-				this.animationRunning = new Animation(this.sprites.get(10), this.texture, 3);
-				this.animationRunning.start();
-				this.render.contentThread(this.texture, this.getTextureX() + 400, this.getTextureY(), 120, false);
-			} else {
-				this.sprites.get(11).resetSprite();
-				this.setAnimationState(11);
-				this.animationRunning = new Animation(this.sprites.get(111), this.texture, 3);
-				this.animationRunning.start();
-				this.render.contentThread(this.texture, this.getTextureX() - 400, this.getTextureY(), 120, false);
-			}
-		}
-	}
-	
+
+	public abstract void attack2(Boolean canBeCancel);
+
 	public abstract void attack3(Boolean canBeCancel);
 
 	protected void resize(int nbTexture) {
@@ -192,5 +173,6 @@ public abstract class AnimationChampionManager extends AnimationManager {
 				atall - this.sprites.get(nbTexture).getActualSprite().getHeight());
 		this.forceSetSize(this.sprites.get(nbTexture).getActualSprite().getWidth(),
 				this.sprites.get(nbTexture).getActualSprite().getHeight());
+		this.texture.setImage(this.sprites.get(nbTexture).getActualSprite());
 	}
 }

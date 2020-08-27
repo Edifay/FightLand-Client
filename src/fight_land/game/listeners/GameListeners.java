@@ -37,7 +37,7 @@ public class GameListeners implements KeyListener, MouseListener {
 	public void mousePressed(MouseEvent e) {
 		if (e.getButton() == 1) {
 			this.game.setATTACK1(true);
-		} else if (e.getButton() == 2) {
+		} else if (e.getButton() == 3) {
 			this.game.setATTACK2(true);
 		}
 	}
@@ -46,7 +46,7 @@ public class GameListeners implements KeyListener, MouseListener {
 	public void mouseReleased(MouseEvent e) {
 		if (e.getButton() == 1) {
 			this.game.setATTACK1(false);
-		} else if (e.getButton() == 2) {
+		} else if (e.getButton() == 3) {
 			this.game.setATTACK2(false);
 		}
 	}

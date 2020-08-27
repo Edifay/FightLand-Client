@@ -26,7 +26,7 @@ public class LoadGame {
 		try {// load stand right
 			sprites1.add(new Sprites(
 					ImageIO.read(getClass().getResource("/assets/game/champions/champion_1/stand_cosmo.png")), 171,
-					207));
+					205));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -77,8 +77,8 @@ public class LoadGame {
 		
 		try {// load attack1 right
 			sprites1.add(new Sprites(
-					ImageIO.read(getClass().getResource("/assets/game/champions/champion_1/attack1_cosmo.png")), 221,
-					207));
+					ImageIO.read(getClass().getResource("/assets/game/champions/champion_1/attack1_cosmo.png")), 227,
+					215));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

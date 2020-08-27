@@ -98,6 +98,10 @@ public class Mouvement {
 					}).start();
 				}
 				
+				if(this.game.getATTACK2()) {
+					this.animationManager.attack2(false);
+				}
+				
 				if(this.game.getATTACK3()) {
 					this.animationManager.attack3(false);
 				}
