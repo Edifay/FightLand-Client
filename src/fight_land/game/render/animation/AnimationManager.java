@@ -1,5 +1,6 @@
 package fight_land.game.render.animation;
 
+import fight_land.game.loop.Game;
 import fight_land.game.render.GraphicsRender;
 import fight_land.game.render.graphics.Texture;
 
@@ -9,10 +10,12 @@ public abstract class AnimationManager {
 	protected Animation animationRunning;
 	protected GraphicsRender render;
 	protected int AnimationState;
+	protected Game game;
 
-	public AnimationManager(GraphicsRender render, Texture texture) {
+	public AnimationManager(GraphicsRender render, Texture texture, Game game) {
 		this.render = render;
 		this.texture = texture;
+		this.game = game;
 	}
 
 	public void stopActualAnimation() {

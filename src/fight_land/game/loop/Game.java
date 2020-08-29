@@ -2,6 +2,8 @@ package fight_land.game.loop;
 
 import static fight_land.frame.FightLandFrame.frame;
 
+import java.util.ArrayList;
+
 import fight_land.AssetsContener;
 import fight_land.game.listeners.GameListeners;
 import fight_land.game.loop.mouvement.Mouvement;
@@ -19,6 +21,9 @@ public class Game {
 	private Texture actual_player;
 	private Mouvement mouvementActual_Player;
 	private AnimationChampionManager animationManagerForActualPlayer;
+
+	private ArrayList<AnimationChampionManager> champions;
+
 	private Thread loop;
 	private Boolean RIGHT = false;
 	private Boolean LEFT = false;
@@ -41,28 +46,33 @@ public class Game {
 	}
 
 	public void start() {
+		this.champions = new ArrayList<AnimationChampionManager>();
 
 		AnimationMapManager mapAnimation = new AnimationLavaMapManager(this.render, new Texture(),
-				AssetsContener.assets.getMaps().get(0));
+				AssetsContener.assets.getMaps().get(0), this);
 		mapAnimation.setVisible(true);
 
 		this.animationManagerForActualPlayer = new AnimationCosmonaute(this.render, new Texture(),
-				AssetsContener.assets.getAllPlayersAndSprites().get(0));
+				AssetsContener.assets.getAllPlayersAndSprites().get(0), this);
 		this.animationManagerForActualPlayer.forceSetLocation(600, 100);
 		this.animationManagerForActualPlayer.forceSetSize(135, 194);
 		this.animationManagerForActualPlayer.setVisible(true);
 		this.animationManagerForActualPlayer.setAnimationState(0);
 		this.animationManagerForActualPlayer.stand(true);
 
+		this.champions.add(this.animationManagerForActualPlayer);
+
 		new MouvementOther(this, this.animationManagerForActualPlayer).start();
 
 		this.animationManagerForActualPlayer = new AnimationCosmonaute(this.render, this.actual_player,
-				AssetsContener.assets.getAllPlayersAndSprites().get(0));
+				AssetsContener.assets.getAllPlayersAndSprites().get(0), this);
 		this.animationManagerForActualPlayer.forceSetLocation(250, 100);
 		this.animationManagerForActualPlayer.forceSetSize(135, 194);
 		this.animationManagerForActualPlayer.setVisible(true);
 		this.animationManagerForActualPlayer.setAnimationState(0);
 		this.animationManagerForActualPlayer.stand(true);
+		
+		this.champions.add(this.animationManagerForActualPlayer);
 
 		this.mouvementActual_Player = new Mouvement(this, this.animationManagerForActualPlayer);
 		this.mouvementActual_Player.start();
@@ -182,6 +192,14 @@ public class Game {
 
 	public void setOtherROULADE(Boolean otherROULADE) {
 		this.otherROULADE = otherROULADE;
+	}
+
+	public ArrayList<AnimationChampionManager> getChampions() {
+		return this.champions;
+	}
+
+	public void setChampions(ArrayList<AnimationChampionManager> champions) {
+		this.champions = champions;
 	}
 
 }

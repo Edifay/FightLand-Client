@@ -2,6 +2,7 @@ package fight_land.game.render.animation.animation_type;
 
 import java.util.ArrayList;
 
+import fight_land.game.loop.Game;
 import fight_land.game.loop.mouvement.Mouvement;
 import fight_land.game.render.GraphicsRender;
 import fight_land.game.render.animation.Animation;
@@ -15,12 +16,13 @@ public abstract class AnimationChampionManager extends AnimationManager {
 	public static final Boolean LEFT = false;
 
 	protected Boolean canBeCancel = true;
+	
 
 	protected ArrayList<Sprites> sprites;
 
 	@SuppressWarnings("unchecked")
-	public AnimationChampionManager(GraphicsRender render, Texture texture, ArrayList<Sprites> sprites) {
-		super(render, texture);
+	public AnimationChampionManager(GraphicsRender render, Texture texture, ArrayList<Sprites> sprites, Game game) {
+		super(render, texture, game);
 		this.sprites = (ArrayList<Sprites>) sprites.clone();
 		for (int i = 0; i < this.sprites.size(); i++) {
 			this.sprites.set(i, this.sprites.get(i).clone());

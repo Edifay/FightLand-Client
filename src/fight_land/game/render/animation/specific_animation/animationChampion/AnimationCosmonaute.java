@@ -2,16 +2,19 @@ package fight_land.game.render.animation.specific_animation.animationChampion;
 
 import java.util.ArrayList;
 
+import fight_land.game.loop.Game;
 import fight_land.game.render.GraphicsRender;
 import fight_land.game.render.animation.Animation;
 import fight_land.game.render.animation.animation_type.AnimationChampionManager;
+import fight_land.game.render.collisions.ActionHit;
+import fight_land.game.render.collisions.HitDetector;
 import fight_land.game.render.graphics.Sprites;
 import fight_land.game.render.graphics.Texture;
 
 public class AnimationCosmonaute extends AnimationChampionManager {
 
-	public AnimationCosmonaute(GraphicsRender render, Texture texture, ArrayList<Sprites> sprites) {
-		super(render, texture, sprites);
+	public AnimationCosmonaute(GraphicsRender render, Texture texture, ArrayList<Sprites> sprites, Game game) {
+		super(render, texture, sprites, game);
 	}
 
 	public synchronized void attack3(Boolean canBeCancel) {
@@ -85,25 +88,41 @@ public class AnimationCosmonaute extends AnimationChampionManager {
 				Texture moon = new Texture();
 				moon.setSize(this.sprites.get(12).getActualSprite().getWidth(),
 						this.sprites.get(12).getActualSprite().getHeight());
-				moon.setLocation(this.texture.getLocation().getX() + 300, this.texture.getLocation().getY() + 100);
-				Animation animationMoon = new Animation(this.sprites.get(12), moon, 25);
+				moon.setLocation(this.texture.getLocation().getX() + 300, this.texture.getLocation().getY() + 50);
+				HitDetector collision = new HitDetector(moon, this.game.getChampions(), new ActionHit() {
+					
+					@Override
+					public void runActionHit(Texture collisionOwner, AnimationChampionManager collisionVictim) {
+						System.out.println("touch");
+						collisionVictim.fall(false);
+					}
+				});
+				collision.start();
+				Animation animationMoon = new Animation(this.sprites.get(12).clone(), moon, 25);
+				this.sprites.get(12).resetSprite();
 				moon.setImage(this.sprites.get(12).getActualSprite());
 				this.render.addTexture(moon);
+				this.sprites.get(10).resetSprite();
+				resize(10);
 				try {
-					Thread.sleep(400);
+					Thread.sleep(30);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				this.sprites.get(10).resetSprite();
-				resize(10);
 				this.setAnimationState(10);
 				this.animationRunning = new Animation(this.sprites.get(10), this.texture, 6);
 				new Thread(() -> {
 					animationMoon.startOne();
 					this.render.remove(moon);
 				}).start();
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				this.animationRunning.startOne();
 				this.canBeCancel = true;
+				collision.stop();
 			} else {
 				this.canBeCancel = true;
 			}
