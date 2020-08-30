@@ -16,7 +16,6 @@ public abstract class AnimationChampionManager extends AnimationManager {
 	public static final Boolean LEFT = false;
 
 	protected Boolean canBeCancel = true;
-	
 
 	protected ArrayList<Sprites> sprites;
 
@@ -173,6 +172,38 @@ public abstract class AnimationChampionManager extends AnimationManager {
 	public abstract void attack2(Boolean canBeCancel);
 
 	public abstract void attack3(Boolean canBeCancel);
+	
+	public void tilt(Boolean canBeCancel) {
+		if (this.canBeCancel) {
+			this.canBeCancel = canBeCancel;
+			super.stopActualAnimation();
+			if (this.texture.getRightOrLeft()) {
+				this.sprites.get(17).resetSprite();
+				resize(17);
+				this.setAnimationState(17);
+				this.animationRunning = new Animation(this.sprites.get(17), this.texture, 25);
+				this.animationRunning.start();
+				try {
+					Thread.sleep(360);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				this.canBeCancel = true;
+			} else {
+				this.sprites.get(18).resetSprite();
+				resize(18);
+				this.setAnimationState(18);
+				this.animationRunning = new Animation(this.sprites.get(18), this.texture, 25);
+				this.animationRunning.start();
+				try {
+					Thread.sleep(360);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				this.canBeCancel = true;
+			}
+		}
+	}
 
 	protected void resize(int nbTexture) {
 		float atall = (float) (this.texture.getLocation().getY() + this.texture.getSize().getHeight());

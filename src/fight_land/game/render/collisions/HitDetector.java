@@ -32,6 +32,8 @@ public class HitDetector {
 		return new Thread(() -> {
 			try {
 				while (true) {
+					
+					System.out.println("testing");
 
 					Rectangle recOwner = new Rectangle((int) this.collisionOwner.getLocation().getX(),
 							(int) this.collisionOwner.getLocation().getY(),
@@ -39,7 +41,6 @@ public class HitDetector {
 							(int) this.collisionOwner.getSize().getHeight());
 
 					for (int i = 0; i < this.playerTexture.size(); i++) {
-						System.out.println("Testing : " + i);
 						if (this.playerTexture.get(i).getTexture() != this.collisionOwner) {
 							Rectangle recVictim = new Rectangle(
 									(int) this.playerTexture.get(i).getTexture().getLocation().getX(),
@@ -51,7 +52,6 @@ public class HitDetector {
 								this.action.runActionHit(this.collisionOwner, this.playerTexture.get(i));
 							}
 						} else {
-							System.out.println("exept : " + i);
 						}
 					}
 

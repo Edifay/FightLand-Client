@@ -136,6 +136,20 @@ public class LoadGame {
 		loaded++;
 
 		assets.getAllPlayersAndSprites().add(sprites1);
+		
+		try {// load tilt right
+			sprites1.add(new Sprites(
+					ImageIO.read(getClass().getResource("/assets/game/champions/champion_1/tilt_cosmo.png")), 283,
+					272));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		loaded++;
+
+		sprites1.add(sprites1.get(18).getSpritesFlip());
+		loaded++;
+
+		assets.getAllPlayersAndSprites().add(sprites1);
 
 		try {// load map 1
 			assets.getMaps().add(ImageIO.read(getClass().getResource("/assets/game/maps/lavaCave/cave_hidebox.png")));

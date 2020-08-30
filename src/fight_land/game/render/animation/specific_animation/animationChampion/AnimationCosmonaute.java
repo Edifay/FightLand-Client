@@ -90,12 +90,12 @@ public class AnimationCosmonaute extends AnimationChampionManager {
 						this.sprites.get(12).getActualSprite().getHeight());
 				moon.setLocation(this.texture.getLocation().getX() + 300, this.texture.getLocation().getY() + 50);
 				HitDetector collision = new HitDetector(moon, this.game.getChampions(), new ActionHit() {
-					
+
 					@Override
 					public void runActionHit(Texture collisionOwner, AnimationChampionManager collisionVictim) {
-						System.out.println("touch");
-						collisionVictim.fall(false);
+						collisionVictim.tilt(false);
 					}
+
 				});
 				collision.start();
 				Animation animationMoon = new Animation(this.sprites.get(12).clone(), moon, 25);
