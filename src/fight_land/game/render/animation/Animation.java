@@ -40,7 +40,7 @@ public class Animation {
 			try {
 				while (true) {
 					Thread.sleep(this.timeSwap);
-					this.textureAtModify.setImage(sprites.getNextSprite());
+					this.textureAtModify.setImage(this.sprites.getNextSprite());
 				}
 			} catch (Exception e) {
 			}
@@ -51,7 +51,7 @@ public class Animation {
 		try {
 			for (int i = 0; i < this.sprites.getSpritesNumber(); i++) {
 				Thread.sleep(this.timeSwap);
-				this.textureAtModify.setImage(sprites.getNextSprite());
+				this.textureAtModify.setImage(this.sprites.getNextSprite());
 			}
 		} catch (Exception e) {
 		}

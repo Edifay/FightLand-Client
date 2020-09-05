@@ -12,12 +12,24 @@ public class HitDetector {
 	private Texture collisionOwner;
 	private ArrayList<AnimationChampionManager> playerTexture;
 	private ActionHit action;
+	private Texture championOwner;
 
+	@SuppressWarnings("unchecked")
 	public HitDetector(Texture collisionOwner, ArrayList<AnimationChampionManager> playerTexture, ActionHit action) {
 		this.collisionOwner = collisionOwner;
-		this.playerTexture = playerTexture;
+		this.playerTexture = (ArrayList<AnimationChampionManager>) playerTexture.clone();
 		this.action = action;
 		this.tCollision = new Thread();
+		this.championOwner = null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public HitDetector(Texture collisionOwner, ArrayList<AnimationChampionManager> playerTexture, ActionHit action, Texture championOwner) {
+		this.collisionOwner = collisionOwner;
+		this.playerTexture = (ArrayList<AnimationChampionManager>) playerTexture.clone();
+		this.action = action;
+		this.tCollision = new Thread();
+		this.championOwner = championOwner;
 	}
 
 	public void start() {
@@ -32,8 +44,6 @@ public class HitDetector {
 		return new Thread(() -> {
 			try {
 				while (true) {
-					
-					System.out.println("testing");
 
 					Rectangle recOwner = new Rectangle((int) this.collisionOwner.getLocation().getX(),
 							(int) this.collisionOwner.getLocation().getY(),
@@ -41,7 +51,8 @@ public class HitDetector {
 							(int) this.collisionOwner.getSize().getHeight());
 
 					for (int i = 0; i < this.playerTexture.size(); i++) {
-						if (this.playerTexture.get(i).getTexture() != this.collisionOwner) {
+						if (this.championOwner == null ? this.playerTexture.get(i).getTexture() != this.collisionOwner:this.playerTexture.get(i).getTexture() != this.championOwner) {
+
 							Rectangle recVictim = new Rectangle(
 									(int) this.playerTexture.get(i).getTexture().getLocation().getX(),
 									(int) this.playerTexture.get(i).getTexture().getLocation().getY(),
@@ -50,11 +61,11 @@ public class HitDetector {
 
 							if (conditionRectangle(recOwner, recVictim)) {
 								this.action.runActionHit(this.collisionOwner, this.playerTexture.get(i));
+								this.playerTexture.remove(i);
 							}
-						} else {
+
 						}
 					}
-
 					Thread.sleep(1);
 				}
 			} catch (InterruptedException e) {
@@ -63,9 +74,8 @@ public class HitDetector {
 	}
 
 	public void stop() {
-		if (this.tCollision.isAlive()) {
+		if (this.tCollision.isAlive())
 			this.tCollision.interrupt();
-		}
 	}
 
 	public Boolean conditionRectangle(Rectangle rec1, Rectangle rec2) {

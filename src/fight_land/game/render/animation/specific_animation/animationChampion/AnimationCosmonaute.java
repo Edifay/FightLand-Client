@@ -93,10 +93,12 @@ public class AnimationCosmonaute extends AnimationChampionManager {
 
 					@Override
 					public void runActionHit(Texture collisionOwner, AnimationChampionManager collisionVictim) {
-						collisionVictim.tilt(false);
+						new Thread(() -> {
+							collisionVictim.tilt(false, collisionOwner);
+						}).start();
 					}
 
-				});
+				}, this.texture);
 				collision.start();
 				Animation animationMoon = new Animation(this.sprites.get(12).clone(), moon, 25);
 				this.sprites.get(12).resetSprite();
@@ -114,6 +116,7 @@ public class AnimationCosmonaute extends AnimationChampionManager {
 				new Thread(() -> {
 					animationMoon.startOne();
 					this.render.remove(moon);
+					collision.stop();
 				}).start();
 				try {
 					Thread.sleep(100);
@@ -122,7 +125,6 @@ public class AnimationCosmonaute extends AnimationChampionManager {
 				}
 				this.animationRunning.startOne();
 				this.canBeCancel = true;
-				collision.stop();
 			} else {
 				this.canBeCancel = true;
 			}

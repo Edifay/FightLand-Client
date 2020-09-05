@@ -87,12 +87,12 @@ public class MenuRequestManager implements Runnable {
 			case 6: {// start game
 				System.out.println("startGame");
 				this.com = null;
-				fight_land.game.Init.init();
+				fight_land.game.Init.init(this.com);
 				// TODO start game
 				break;
 			}
 			default:
-				throw new IllegalArgumentException("Unexpected value: " + pack.getPacketNumber());
+				System.out.println("error read Unknow Error");
 			}
 
 		}
@@ -123,11 +123,9 @@ public class MenuRequestManager implements Runnable {
 				break;
 			}
 			default:
-				throw new IllegalArgumentException("Unexpected value: " + pack.getPacketNumber());
+				System.out.println("error read Unknow Error");
 			}
-
 		}
-
 	}
 
 	private void secureUDPPing() {

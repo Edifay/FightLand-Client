@@ -173,30 +173,30 @@ public abstract class AnimationChampionManager extends AnimationManager {
 
 	public abstract void attack3(Boolean canBeCancel);
 	
-	public void tilt(Boolean canBeCancel) {
+	public void tilt(Boolean canBeCancel, Texture collisionOwner) {
 		if (this.canBeCancel) {
 			this.canBeCancel = canBeCancel;
 			super.stopActualAnimation();
 			if (this.texture.getRightOrLeft()) {
-				this.sprites.get(17).resetSprite();
-				resize(17);
-				this.setAnimationState(17);
-				this.animationRunning = new Animation(this.sprites.get(17), this.texture, 25);
+				this.sprites.get(18).resetSprite();
+				resize(18);
+				this.setAnimationState(18);
+				this.animationRunning = new Animation(this.sprites.get(18), this.texture, 12);
 				this.animationRunning.start();
 				try {
-					Thread.sleep(360);
+					Thread.sleep(1500);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 				this.canBeCancel = true;
 			} else {
 				this.sprites.get(18).resetSprite();
-				resize(18);
-				this.setAnimationState(18);
-				this.animationRunning = new Animation(this.sprites.get(18), this.texture, 25);
+				resize(19);
+				this.setAnimationState(19);
+				this.animationRunning = new Animation(this.sprites.get(19), this.texture, 12);
 				this.animationRunning.start();
 				try {
-					Thread.sleep(360);
+					Thread.sleep(1500);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}

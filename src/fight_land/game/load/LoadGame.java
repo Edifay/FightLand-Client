@@ -135,8 +135,6 @@ public class LoadGame {
 		sprites1.add(sprites1.get(16).getSpritesFlip());
 		loaded++;
 
-		assets.getAllPlayersAndSprites().add(sprites1);
-		
 		try {// load tilt right
 			sprites1.add(new Sprites(
 					ImageIO.read(getClass().getResource("/assets/game/champions/champion_1/tilt_cosmo.png")), 283,

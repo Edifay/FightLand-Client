@@ -9,7 +9,7 @@ public class Connect {
 
 	public static Communication com;
 
-	public static final String ipName = "90.114.150.56";
+	public static final String ipName = "92.157.232.250";
 	public static final int port = 7630;
 
 	public static InetAddress ip;
@@ -19,7 +19,7 @@ public class Connect {
 	public static void connect() {
 		try {
 			ip = InetAddress.getByName(ipName);
-			System.out.println("setup COnnect");
+			System.out.println("setup Connect");
 			com = new Communication();
 			com.setCommunicationPostion(Communication.CLIENT);
 			com.setConnectionType(Communication.TCP_AND_UDP);
