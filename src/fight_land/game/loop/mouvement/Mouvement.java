@@ -11,9 +11,6 @@ public class Mouvement {
 	private int dashNumber = 2;
 	private Boolean resetDash = true;
 
-	private Boolean moveX = true;
-	private Boolean moveY = true;
-
 	private final double maxSpeed = 1;
 	private final double atAdd = 0.1;
 
@@ -59,6 +56,12 @@ public class Mouvement {
 				if (this.animationManager.getTextureY() > 1080) {
 					this.animationManager.forceSetLocation(20, 20);
 				}
+				
+				if(this.animationManager.addBoostY) {
+					System.out.println("add");
+					this.forceY = -5;
+					this.animationManager.addBoostY = false;
+				}
 
 				timeWaited = System.nanoTime();
 				try {
@@ -74,7 +77,7 @@ public class Mouvement {
 					this.animationManager.roulade(true);
 					this.resetDash = false;
 					this.dashNumber--;
-					new Thread(()->{
+					new Thread(() -> {
 						try {
 							Thread.sleep(150);
 						} catch (InterruptedException e) {
@@ -83,10 +86,10 @@ public class Mouvement {
 						this.resetDash = true;
 					}).start();
 				}
-				
-				if (this.game.getATTACK1() && this.moveX && this.attackPossible) {
-					this.animationManager.attack1WithOutSleep(this, false);
-					this.moveX = false;
+
+				if (this.game.getATTACK1() && this.animationManager.canMoveX && this.attackPossible) {
+					this.animationManager.attack1WithOutSleep(false);
+					this.animationManager.canMoveX = false;
 					this.attackPossible = false;
 					new Thread(() -> {
 						try {
@@ -97,12 +100,12 @@ public class Mouvement {
 						this.attackPossible = true;
 					}).start();
 				}
-				
-				if(this.game.getATTACK2()) {
+
+				if (this.game.getATTACK2()) {
 					this.animationManager.attack2(false);
 				}
-				
-				if(this.game.getATTACK3()) {
+
+				if (this.game.getATTACK3()) {
 					this.animationManager.attack3(false);
 				}
 
@@ -133,10 +136,10 @@ public class Mouvement {
 			collisionResult = false;
 		}
 
-		if (this.moveX) {
+		if (this.animationManager.canMoveX) {
 			mouvementAxeX(timeWaited);
 		}
-		if (this.moveY) {
+		if (this.animationManager.canMoveY) {
 			mouvementAxeY(timeWaited, collisionResult);
 		}
 
@@ -161,18 +164,18 @@ public class Mouvement {
 				}
 				if (CollisionsDetector.isThisTextureTouchGravity(this.animationManager.getTexture())) {
 					putToHideBox();
-					 if(this.dashNumber < 2) {
-						 this.dashNumber = 2;
-					 }
+					if (this.dashNumber < 2) {
+						this.dashNumber = 2;
+					}
 				}
 			} else {
 				this.forceY += atAddUp * timeWaited;
 			}
 		} else {
 			putToHideBox();
-			 if(this.dashNumber < 2) {
-				 this.dashNumber = 2;
-			 }
+			if (this.dashNumber < 2) {
+				this.dashNumber = 2;
+			}
 		}
 
 		if (this.game.getJUMP() && collisionResult) {
@@ -275,22 +278,6 @@ public class Mouvement {
 
 	public synchronized void setAttackPossible(Boolean attackPossible) {
 		this.attackPossible = attackPossible;
-	}
-
-	public synchronized Boolean getMoveX() {
-		return this.moveX;
-	}
-
-	public synchronized void setMoveX(Boolean moveX) {
-		this.moveX = moveX;
-	}
-
-	public synchronized Boolean getMoveY() {
-		return this.moveY;
-	}
-
-	public synchronized void setMoveY(Boolean moveY) {
-		this.moveY = moveY;
 	}
 
 }

@@ -39,10 +39,13 @@ public class Game {
 	private Boolean otherJUMP = false;
 	private Boolean otherDOWN = false;
 	private Boolean otherROULADE = false;
+	private Boolean otherATTACK1 = false;
+	private Boolean otherATTACK2 = false;
+	private Boolean otherSPECIAL = false;
 
 	public Game(GraphicsRender render) {
 		this.render = render;
-		this.actual_player = new Texture();
+		this.actual_player = new  Texture();
 	}
 
 	public void start() {
@@ -52,7 +55,7 @@ public class Game {
 				AssetsContener.assets.getMaps().get(0), this);
 		mapAnimation.setVisible(true);
 
-		this.animationManagerForActualPlayer = new AnimationCosmonaute(this.render, new Texture(),
+		this.animationManagerForActualPlayer = new AnimationCosmonaute(this.render, new Texture(), // second
 				AssetsContener.assets.getAllPlayersAndSprites().get(0), this);
 		this.animationManagerForActualPlayer.forceSetLocation(600, 100);
 		this.animationManagerForActualPlayer.forceSetSize(135, 194);
@@ -71,12 +74,12 @@ public class Game {
 		this.animationManagerForActualPlayer.setVisible(true);
 		this.animationManagerForActualPlayer.setAnimationState(0);
 		this.animationManagerForActualPlayer.stand(true);
-		
+
 		this.champions.add(this.animationManagerForActualPlayer);
 
 		this.mouvementActual_Player = new Mouvement(this, this.animationManagerForActualPlayer);
 		this.mouvementActual_Player.start();
-
+		
 		// ADD listeners
 		GameListeners gameListeners = new GameListeners(this);
 		frame.addKeyListener(gameListeners);
@@ -201,5 +204,31 @@ public class Game {
 	public void setChampions(ArrayList<AnimationChampionManager> champions) {
 		this.champions = champions;
 	}
+
+	public Boolean getOtherATTACK1() {
+		return this.otherATTACK1;
+	}
+
+	public void setOtherATTACK1(Boolean otherATTACK1) {
+		this.otherATTACK1 = otherATTACK1;
+	}
+
+	public Boolean getOtherATTACK2() {
+		return this.otherATTACK2;
+	}
+
+	public void setOtherATTACK2(Boolean otherATTACK2) {
+		this.otherATTACK2 = otherATTACK2;
+	}
+
+	public Boolean getOtherSPECIAL() {
+		return this.otherSPECIAL;
+	}
+
+	public void setOtherSPECIAL(Boolean otherSPECIAL) {
+		this.otherSPECIAL = otherSPECIAL;
+	}
+	
+	
 
 }

@@ -22,9 +22,10 @@ public class HitDetector {
 		this.tCollision = new Thread();
 		this.championOwner = null;
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public HitDetector(Texture collisionOwner, ArrayList<AnimationChampionManager> playerTexture, ActionHit action, Texture championOwner) {
+	public HitDetector(Texture collisionOwner, ArrayList<AnimationChampionManager> playerTexture, ActionHit action,
+			Texture championOwner) {
 		this.collisionOwner = collisionOwner;
 		this.playerTexture = (ArrayList<AnimationChampionManager>) playerTexture.clone();
 		this.action = action;
@@ -51,7 +52,8 @@ public class HitDetector {
 							(int) this.collisionOwner.getSize().getHeight());
 
 					for (int i = 0; i < this.playerTexture.size(); i++) {
-						if (this.championOwner == null ? this.playerTexture.get(i).getTexture() != this.collisionOwner:this.playerTexture.get(i).getTexture() != this.championOwner) {
+						if (this.championOwner == null ? this.playerTexture.get(i).getTexture() != this.collisionOwner
+								: this.playerTexture.get(i).getTexture() != this.championOwner) {
 
 							Rectangle recVictim = new Rectangle(
 									(int) this.playerTexture.get(i).getTexture().getLocation().getX(),
@@ -60,7 +62,9 @@ public class HitDetector {
 									(int) this.playerTexture.get(i).getTexture().getSize().getHeight());
 
 							if (conditionRectangle(recOwner, recVictim)) {
-								this.action.runActionHit(this.collisionOwner, this.playerTexture.get(i));
+								this.action.runActionHit(
+										this.championOwner == null ? this.collisionOwner : this.championOwner,
+										this.playerTexture.get(i));
 								this.playerTexture.remove(i);
 							}
 
@@ -79,8 +83,9 @@ public class HitDetector {
 	}
 
 	public Boolean conditionRectangle(Rectangle rec1, Rectangle rec2) {
-		return (rec1.getX() < rec2.getX() + rec2.getWidth() && rec1.getX() + rec2.getWidth() > rec2.getX()
-				&& rec1.getY() < rec1.getY() + rec2.getHeight()
-				&& rec1.getY() + rec2.getHeight() > rec2.getLocation().getY());
+		return (rec1.getX() < rec2.getX() + rec2.getWidth() 
+				&& rec1.getX() + rec1.getWidth() > rec2.getX()
+				&& rec1.getY() < rec2.getY() + rec2.getHeight()
+				&& rec1.getY() + rec1.getHeight() > rec2.getLocation().getY());
 	}
 }

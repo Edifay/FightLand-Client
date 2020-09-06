@@ -2,8 +2,8 @@ package fight_land.game.render.animation.animation_type;
 
 import java.util.ArrayList;
 
+import fight_land.game.Point;
 import fight_land.game.loop.Game;
-import fight_land.game.loop.mouvement.Mouvement;
 import fight_land.game.render.GraphicsRender;
 import fight_land.game.render.animation.Animation;
 import fight_land.game.render.animation.AnimationManager;
@@ -18,10 +18,18 @@ public abstract class AnimationChampionManager extends AnimationManager {
 	protected Boolean canBeCancel = true;
 
 	protected ArrayList<Sprites> sprites;
-
+	
+	public Boolean canMoveX;
+	public Boolean canMoveY;
+	
+	public Boolean addBoostY;
+	
 	@SuppressWarnings("unchecked")
 	public AnimationChampionManager(GraphicsRender render, Texture texture, ArrayList<Sprites> sprites, Game game) {
 		super(render, texture, game);
+		this.canMoveX = true;
+		this.canMoveY = true;
+		this.addBoostY = false;
 		this.sprites = (ArrayList<Sprites>) sprites.clone();
 		for (int i = 0; i < this.sprites.size(); i++) {
 			this.sprites.set(i, this.sprites.get(i).clone());
@@ -139,7 +147,7 @@ public abstract class AnimationChampionManager extends AnimationManager {
 		}
 	}
 
-	public synchronized void attack1WithOutSleep(Mouvement mov, Boolean canBeCancel) {
+	public synchronized void attack1WithOutSleep(Boolean canBeCancel) {
 		if (this.canBeCancel) {
 			this.canBeCancel = canBeCancel;
 			super.stopActualAnimation();
@@ -150,7 +158,7 @@ public abstract class AnimationChampionManager extends AnimationManager {
 				this.animationRunning = new Animation(this.sprites.get(8), this.texture, 9);
 				Thread t = new Thread(() -> {
 					this.animationRunning.startOne();
-					mov.setMoveX(true);
+					this.canMoveX = true;
 					this.canBeCancel = true;
 				});
 				t.start();
@@ -161,7 +169,7 @@ public abstract class AnimationChampionManager extends AnimationManager {
 				this.animationRunning = new Animation(this.sprites.get(9), this.texture, 9);
 				Thread t = new Thread(() -> {
 					this.animationRunning.startOne();
-					mov.setMoveX(true);
+					this.canMoveX = true;	
 					this.canBeCancel = true;
 				});
 				t.start();
@@ -172,22 +180,34 @@ public abstract class AnimationChampionManager extends AnimationManager {
 	public abstract void attack2(Boolean canBeCancel);
 
 	public abstract void attack3(Boolean canBeCancel);
-	
-	public void tilt(Boolean canBeCancel, Texture collisionOwner) {
+
+	public void tilt(Boolean canBeCancel, Texture championOwner) {
 		if (this.canBeCancel) {
 			this.canBeCancel = canBeCancel;
 			super.stopActualAnimation();
 			if (this.texture.getRightOrLeft()) {
+				this.canMoveY = false;
+				this.canMoveX = false;
 				this.sprites.get(18).resetSprite();
 				resize(18);
 				this.setAnimationState(18);
 				this.animationRunning = new Animation(this.sprites.get(18), this.texture, 12);
 				this.animationRunning.start();
-				try {
-					Thread.sleep(1500);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				Point end = new Point(
+						this.texture.getLocation().getX() - championOwner.getLocation().getX()
+								+ this.texture.getLocation().getX(),
+						this.texture.getLocation().getY() - championOwner.getLocation().getY()
+								+ this.texture.getLocation().getY());
+				
+				double distanceEndPointToActual = Math.sqrt(((end.getX()-this.texture.getLocation().getX())*(end.getX()-this.texture.getLocation().getX()))+((end.getY()-this.texture.getLocation().getY())));
+				
+				System.out.println("distance : "+distanceEndPointToActual);
+				this.render.contentThread(this.texture, end.getX(), end.getY(), (int) (300*(distanceEndPointToActual/600)), false);
+
+				System.out.println("x : " + end.getX() + " y : " + end.getY());
+				this.addBoostY = true;
+				this.canMoveY = true;
+				this.canMoveX = true;
 				this.canBeCancel = true;
 			} else {
 				this.sprites.get(18).resetSprite();
@@ -195,11 +215,9 @@ public abstract class AnimationChampionManager extends AnimationManager {
 				this.setAnimationState(19);
 				this.animationRunning = new Animation(this.sprites.get(19), this.texture, 12);
 				this.animationRunning.start();
-				try {
-					Thread.sleep(1500);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				this.render.contentThread(this.texture,
+						this.texture.getLocation().getX() - championOwner.getLocation().getX(),
+						this.texture.getLocation().getY() - championOwner.getLocation().getY(), 300, false);
 				this.canBeCancel = true;
 			}
 		}

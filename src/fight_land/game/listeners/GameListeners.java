@@ -12,6 +12,9 @@ import static fight_land.game.listeners.KeyBind.OTHER_JUMP;
 import static fight_land.game.listeners.KeyBind.OTHER_LEFT;
 import static fight_land.game.listeners.KeyBind.OTHER_RIGHT;
 import static fight_land.game.listeners.KeyBind.OTHER_ROULADE;
+import static fight_land.game.listeners.KeyBind.OTHER_ATTACK1;
+import static fight_land.game.listeners.KeyBind.OTHER_ATTACK2;
+import static fight_land.game.listeners.KeyBind.OTHER_SPECIAL;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -68,6 +71,7 @@ public class GameListeners implements KeyListener, MouseListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		System.out.println("Pressed : "+e.getKeyCode());
 
 		if (e.getKeyCode() == JUMP) {
 			this.game.setJUMP(true);
@@ -93,6 +97,12 @@ public class GameListeners implements KeyListener, MouseListener {
 			this.game.setOtherRIGHT(true);
 		} else if (e.getKeyCode() == OTHER_ROULADE) {
 			this.game.setOtherROULADE(true);
+		} else if (e.getKeyChar() == OTHER_ATTACK1) {
+			this.game.setOtherATTACK1(true);
+		} else if (e.getKeyCode() == OTHER_ATTACK2) {
+			this.game.setOtherATTACK2(true);
+		} else if (e.getKeyCode() == OTHER_SPECIAL) {
+			this.game.setOtherSPECIAL(true);
 		}
 
 	}
@@ -123,6 +133,12 @@ public class GameListeners implements KeyListener, MouseListener {
 			this.game.setOtherRIGHT(false);
 		} else if (e.getKeyCode() == OTHER_ROULADE) {
 			this.game.setOtherROULADE(false);
+		}else if (e.getKeyChar() == OTHER_ATTACK1) {
+			this.game.setOtherATTACK1(false);
+		} else if (e.getKeyCode() == OTHER_ATTACK2) {
+			this.game.setOtherATTACK2(false);
+		} else if (e.getKeyCode() == OTHER_SPECIAL) {
+			this.game.setOtherSPECIAL(false);
 		}
 	}
 }

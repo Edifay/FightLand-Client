@@ -7,6 +7,10 @@ import fight_land.game.render.graphics.Texture;
 
 public class MouvementOther {
 
+	private Boolean attackPossible = true;
+	private int dashNumber = 2;
+	private Boolean resetDash = true;
+
 	private final double maxSpeed = 1;
 	private final double atAdd = 0.1;
 
@@ -46,10 +50,16 @@ public class MouvementOther {
 			double timeWaited;
 			this.forceX = 0;
 			this.forceY = 0;
+
 			while (true) {
 
 				if (this.animationManager.getTextureY() > 1080) {
 					this.animationManager.forceSetLocation(20, 20);
+				}
+				
+				if(this.animationManager.addBoostY) {
+					this.forceY = -1;
+					this.animationManager.addBoostY = false;
 				}
 
 				timeWaited = System.nanoTime();
@@ -60,12 +70,45 @@ public class MouvementOther {
 				}
 				timeWaited = System.nanoTime() - timeWaited;
 				timeWaited = timeWaited / 1000000;
-				
-				if(this.game.getOtherROULADE()) {
+
+				// ALL Action
+				if (this.game.getOtherROULADE() && this.dashNumber > 0 && this.resetDash) {// time dash and double dash
 					this.animationManager.roulade(true);
+					this.resetDash = false;
+					this.dashNumber--;
+					new Thread(() -> {
+						try {
+							Thread.sleep(150);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						this.resetDash = true;
+					}).start();
 				}
 
-				if (timeWaited <= 4) {
+				if (this.game.getOtherATTACK1() && this.animationManager.canMoveX && this.attackPossible) {
+					this.animationManager.attack1WithOutSleep(false);
+					this.animationManager.canMoveX = false;
+					this.attackPossible = false;
+					new Thread(() -> {
+						try {
+							Thread.sleep(720);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						this.attackPossible = true;
+					}).start();
+				}
+
+				if (this.game.getOtherATTACK2()) {
+					this.animationManager.attack2(false);
+				}
+
+				if (this.game.getOtherSPECIAL()) {
+					this.animationManager.attack3(false);
+				}
+
+				if (timeWaited <= 4) {// don't skip too much px
 					allMovementAndHideBox(timeWaited);
 				} else {
 					double actual_time_waited = 0;
@@ -92,8 +135,12 @@ public class MouvementOther {
 			collisionResult = false;
 		}
 
-		mouvementAxeX(timeWaited);
-		mouvementAxeY(timeWaited, collisionResult);
+		if (this.animationManager.canMoveX) {
+			mouvementAxeX(timeWaited);
+		}
+		if (this.animationManager.canMoveY) {
+			mouvementAxeY(timeWaited, collisionResult);
+		}
 
 		this.animationManager.forceSetLocation(
 				(float) (this.animationManager.getTextureX() + (this.forceX * timeWaited)),
@@ -116,12 +163,18 @@ public class MouvementOther {
 				}
 				if (CollisionsDetector.isThisTextureTouchGravity(this.animationManager.getTexture())) {
 					putToHideBox();
+					if (this.dashNumber < 2) {
+						this.dashNumber = 2;
+					}
 				}
 			} else {
 				this.forceY += atAddUp * timeWaited;
 			}
 		} else {
 			putToHideBox();
+			if (this.dashNumber < 2) {
+				this.dashNumber = 2;
+			}
 		}
 
 		if (this.game.getOtherJUMP() && collisionResult) {
@@ -148,11 +201,11 @@ public class MouvementOther {
 
 	private void mouvementAxeX(double timeWaited) {
 		Boolean collisionResult = CollisionsDetector.isThisTextureTouchGravity(this.animationManager.getTexture());
-		if (this.game.getOtherLEFT() && this.game.getOtherRIGHT()) {
+		if (game.getOtherLEFT() && game.getOtherRIGHT()) {
 			put0AtForce(timeWaited, collisionResult);
-		} else if (this.game.getOtherRIGHT()) {
+		} else if (game.getOtherRIGHT()) {
 			setLeftForce(timeWaited, collisionResult);
-		} else if (this.game.getOtherLEFT()) {
+		} else if (game.getOtherLEFT()) {
 			setRightForce(timeWaited, collisionResult);
 		} else {// ramener la force à 0
 			put0AtForce(timeWaited, collisionResult);
@@ -217,4 +270,13 @@ public class MouvementOther {
 			this.forceX = 0;
 		}
 	}
+
+	public synchronized Boolean getAttackPossible() {
+		return this.attackPossible;
+	}
+
+	public synchronized void setAttackPossible(Boolean attackPossible) {
+		this.attackPossible = attackPossible;
+	}
+
 }

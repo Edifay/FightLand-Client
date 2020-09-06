@@ -7,19 +7,19 @@ import fight_land.game.Point;
 
 public class Texture {
 
-	private BufferedImage img;
+	protected BufferedImage img;
 
-	private Point location;
+	protected Point location;
 
-	private Dimension size;
+	protected Dimension size;
 
-	private Boolean RightOrLeft;
+	protected Boolean RightOrLeft;
 
 	public Texture() {
 		this.RightOrLeft = true;
 	}
 
-	public void setLocation(float  x, float y) {
+	public void setLocation(float x, float y) {
 		this.location = new Point(x, y);
 	}
 
@@ -58,7 +58,7 @@ public class Texture {
 	public void setRightOrLeft(Boolean rightOrLeft) {
 		this.RightOrLeft = rightOrLeft;
 	}
-	
+
 	public Texture cloneBound() {
 		Texture text = new Texture();
 		text.setLocation(this.getLocation());
