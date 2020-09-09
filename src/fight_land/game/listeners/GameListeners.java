@@ -71,7 +71,7 @@ public class GameListeners implements KeyListener, MouseListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		System.out.println("Pressed : "+e.getKeyCode());
+//		System.out.println("Pressed : "+e.getKeyCode());
 
 		if (e.getKeyCode() == JUMP) {
 			this.game.setJUMP(true);
@@ -97,7 +97,7 @@ public class GameListeners implements KeyListener, MouseListener {
 			this.game.setOtherRIGHT(true);
 		} else if (e.getKeyCode() == OTHER_ROULADE) {
 			this.game.setOtherROULADE(true);
-		} else if (e.getKeyChar() == OTHER_ATTACK1) {
+		} else if (e.getKeyCode() == OTHER_ATTACK1) {
 			this.game.setOtherATTACK1(true);
 		} else if (e.getKeyCode() == OTHER_ATTACK2) {
 			this.game.setOtherATTACK2(true);
@@ -133,7 +133,7 @@ public class GameListeners implements KeyListener, MouseListener {
 			this.game.setOtherRIGHT(false);
 		} else if (e.getKeyCode() == OTHER_ROULADE) {
 			this.game.setOtherROULADE(false);
-		}else if (e.getKeyChar() == OTHER_ATTACK1) {
+		}else if (e.getKeyCode() == OTHER_ATTACK1) {
 			this.game.setOtherATTACK1(false);
 		} else if (e.getKeyCode() == OTHER_ATTACK2) {
 			this.game.setOtherATTACK2(false);

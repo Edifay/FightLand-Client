@@ -27,7 +27,7 @@ public class AnimationCosmonaute extends AnimationChampionManager {
 				this.setAnimationState(14);
 				this.animationRunning = new Animation(this.sprites.get(14), this.texture, 15);
 				new Thread(() -> {
-					Texture fuze = new Texture();
+					Texture fuze = new Texture(true);
 					fuze.setLocation(this.texture.getLocation().getX(), this.texture.getLocation().getY() - 200);
 					fuze.setSize(this.sprites.get(16).getActualSprite().getWidth(),
 							this.sprites.get(15).getActualSprite().getHeight());
@@ -52,7 +52,7 @@ public class AnimationCosmonaute extends AnimationChampionManager {
 				this.setAnimationState(15);
 				this.animationRunning = new Animation(this.sprites.get(15), this.texture, 15);
 				new Thread(() -> {
-					Texture fuze = new Texture();
+					Texture fuze = new Texture(true);
 					fuze.setLocation(
 							(float) (this.texture.getLocation().getX()
 									- this.sprites.get(15).getActualSprite().getWidth()),
@@ -85,7 +85,7 @@ public class AnimationCosmonaute extends AnimationChampionManager {
 			this.canBeCancel = canBeCancel;
 			super.stopActualAnimation();
 			if (this.texture.getRightOrLeft()) {
-				Texture moon = new Texture();
+				Texture moon = new Texture(true);
 				moon.setSize(this.sprites.get(12).getActualSprite().getWidth(),
 						this.sprites.get(12).getActualSprite().getHeight());
 				moon.setLocation(this.texture.getLocation().getX() + 300, this.texture.getLocation().getY() + 50);
@@ -94,7 +94,8 @@ public class AnimationCosmonaute extends AnimationChampionManager {
 					@Override
 					public void runActionHit(Texture collisionOwner, AnimationChampionManager collisionVictim) {
 						new Thread(() -> {
-							collisionVictim.tilt(false, collisionOwner);
+							collisionVictim.tilt(false, collisionOwner, 400, 100);
+							collisionVictim.setHP(collisionVictim.getHP() + 0.5f);
 						}).start();
 					}
 
@@ -126,6 +127,47 @@ public class AnimationCosmonaute extends AnimationChampionManager {
 				this.animationRunning.startOne();
 				this.canBeCancel = true;
 			} else {
+				this.sprites.get(11).resetSprite();
+				resize(11);
+				Texture moon = new Texture(true);
+				moon.setSize(this.sprites.get(13).getActualSprite().getWidth(),
+						this.sprites.get(13).getActualSprite().getHeight());
+				moon.setLocation(
+						(float) (this.texture.getLocation().getX() - (300 - (this.texture.getSize().getWidth() / 2))),
+						this.texture.getLocation().getY() + 50);
+				HitDetector collision = new HitDetector(moon, this.game.getChampions(), new ActionHit() {
+
+					@Override
+					public void runActionHit(Texture collisionOwner, AnimationChampionManager collisionVictim) {
+						new Thread(() -> {
+							collisionVictim.tilt(false, collisionOwner, 400, 100);
+						}).start();
+					}
+
+				}, this.texture);
+				collision.start();
+				Animation animationMoon = new Animation(this.sprites.get(13).clone(), moon, 25);
+				this.sprites.get(13).resetSprite();
+				moon.setImage(this.sprites.get(13).getActualSprite());
+				this.render.addTexture(moon);
+				try {
+					Thread.sleep(30);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				this.setAnimationState(11);
+				this.animationRunning = new Animation(this.sprites.get(11), this.texture, 6);
+				new Thread(() -> {
+					animationMoon.startOne();
+					this.render.remove(moon);
+					collision.stop();
+				}).start();
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				this.animationRunning.startOne();
 				this.canBeCancel = true;
 			}
 		}

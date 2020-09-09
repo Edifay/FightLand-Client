@@ -1,6 +1,7 @@
 package fight_land.game.render;
 
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import fight_land.game.render.graphics.GraphicGame;
@@ -31,6 +32,7 @@ public class GraphicsRender {
 	}
 
 	public Texture[] getTexturesAtRend() {
+		this.updateTextureAtRend();
 		return this.texturesAtRend;
 	}
 
@@ -46,7 +48,48 @@ public class GraphicsRender {
 
 	public synchronized void updateTextureAtRend() {
 		this.texturesAtRend = new Texture[this.allTextures.size()];
-		this.allTextures.toArray(this.texturesAtRend);
+		float x = 100000;
+		float lastX = -1000;
+		float y = 100000;
+		float lastY = -1000;
+
+		for (int i = 0; i < this.allTextures.size(); i++) {
+			if (this.allTextures.get(i).getHaveToBeIn()) {
+				if (this.allTextures.get(i).getLocation().getX() < x) {
+					x = (int) (this.allTextures.get(i).getLocation().getX() - 100);
+				}
+				if (this.allTextures.get(i).getLocation().getX()
+						+ this.allTextures.get(i).getSize().getWidth() > lastX) {
+					lastX = (int) (this.allTextures.get(i).getLocation().getX()
+							+ this.allTextures.get(i).getSize().getWidth() + 100);
+				}
+				if (this.allTextures.get(i).getLocation().getY() < y) {
+					y = (int) (this.allTextures.get(i).getLocation().getY() - 100);
+				}
+				if (this.allTextures.get(i).getLocation().getY()
+						+ this.allTextures.get(i).getSize().getHeight() > lastY) {
+					lastY = (int) (this.allTextures.get(i).getLocation().getY()
+							+ this.allTextures.get(i).getSize().getHeight() + 100);
+				}
+			}
+		}
+		float width = lastX - x;
+		float height = lastY - y;
+		if (width / 1920 > height / 1080) {
+			height = (9 * width) / 16;
+		} else {
+			width = (16 * height) / 9;
+		}
+		
+		float racio_width = 1920f/width;
+		float racio_height = 1080f/height;
+		
+		for (int i = 0; i < this.allTextures.size(); i++) {
+			Texture text = this.allTextures.get(i).clone();
+			text.setLocation(text.getLocation().getX()-x, text.getLocation().getY()-y);
+			text.setSize((int)(text.getSize().getWidth()*racio_width), (int) (text.getSize().getHeight()*racio_height));
+			this.texturesAtRend[i] = text;
+		}
 	}
 
 	public void remove(Texture texture) {

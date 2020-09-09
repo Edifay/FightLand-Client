@@ -15,8 +15,11 @@ public class Texture {
 
 	protected Boolean RightOrLeft;
 
-	public Texture() {
+	protected Boolean haveToBeIn;
+
+	public Texture(Boolean haveToBeIn) {
 		this.RightOrLeft = true;
+		this.haveToBeIn = haveToBeIn;
 	}
 
 	public void setLocation(float x, float y) {
@@ -60,9 +63,26 @@ public class Texture {
 	}
 
 	public Texture cloneBound() {
-		Texture text = new Texture();
+		Texture text = new Texture(this.haveToBeIn);
 		text.setLocation(this.getLocation());
 		text.setSize(this.getSize());
 		return text;
+	}
+
+	public Texture clone() {
+		Texture text = new Texture(this.haveToBeIn);
+		text.setImage(this.img);
+		text.setLocation(this.location);
+		text.setRightOrLeft(this.RightOrLeft);
+		text.setSize(this.size);
+		return text;
+	}
+
+	public Boolean getHaveToBeIn() {
+		return this.haveToBeIn;
+	}
+
+	public void setHaveToBeIn(Boolean bool) {
+		this.haveToBeIn = bool;
 	}
 }

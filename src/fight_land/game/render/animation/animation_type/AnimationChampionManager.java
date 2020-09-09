@@ -18,12 +18,12 @@ public abstract class AnimationChampionManager extends AnimationManager {
 	protected Boolean canBeCancel = true;
 
 	protected ArrayList<Sprites> sprites;
-	
+
 	public Boolean canMoveX;
 	public Boolean canMoveY;
-	
+
 	public Boolean addBoostY;
-	
+
 	@SuppressWarnings("unchecked")
 	public AnimationChampionManager(GraphicsRender render, Texture texture, ArrayList<Sprites> sprites, Game game) {
 		super(render, texture, game);
@@ -169,7 +169,7 @@ public abstract class AnimationChampionManager extends AnimationManager {
 				this.animationRunning = new Animation(this.sprites.get(9), this.texture, 9);
 				Thread t = new Thread(() -> {
 					this.animationRunning.startOne();
-					this.canMoveX = true;	
+					this.canMoveX = true;
 					this.canBeCancel = true;
 				});
 				t.start();
@@ -181,28 +181,33 @@ public abstract class AnimationChampionManager extends AnimationManager {
 
 	public abstract void attack3(Boolean canBeCancel);
 
-	public void tilt(Boolean canBeCancel, Texture championOwner) {
+	public void tilt(Boolean canBeCancel, Texture championOwner, int XExplosion, int YExplosion) {
 		if (this.canBeCancel) {
 			this.canBeCancel = canBeCancel;
 			super.stopActualAnimation();
+			if (this.texture.getLocation().getX() > championOwner.getLocation().getX()) {
+				this.texture.setRightOrLeft(true);
+			} else {
+				this.texture.setRightOrLeft(false);
+			}
 			if (this.texture.getRightOrLeft()) {
 				this.canMoveY = false;
 				this.canMoveX = false;
 				this.sprites.get(18).resetSprite();
 				resize(18);
 				this.setAnimationState(18);
-				this.animationRunning = new Animation(this.sprites.get(18), this.texture, 12);
+				this.animationRunning = new Animation(this.sprites.get(18), this.texture, 5);
 				this.animationRunning.start();
-				Point end = new Point(
-						this.texture.getLocation().getX() - championOwner.getLocation().getX()
-								+ this.texture.getLocation().getX(),
-						this.texture.getLocation().getY() - championOwner.getLocation().getY()
-								+ this.texture.getLocation().getY());
-				
-				double distanceEndPointToActual = Math.sqrt(((end.getX()-this.texture.getLocation().getX())*(end.getX()-this.texture.getLocation().getX()))+((end.getY()-this.texture.getLocation().getY())));
-				
-				System.out.println("distance : "+distanceEndPointToActual);
-				this.render.contentThread(this.texture, end.getX(), end.getY(), (int) (300*(distanceEndPointToActual/600)), false);
+				Point end = new Point((XExplosion*this.game.getHP()) + this.texture.getLocation().getX(),
+						-(YExplosion*this.game.getHP()) + this.texture.getLocation().getY());
+
+				double distanceEndPointToActual = Math.sqrt(((end.getX() - this.texture.getLocation().getX())
+						* (end.getX() - this.texture.getLocation().getX()))
+						+ ((end.getY() - this.texture.getLocation().getY())));
+
+				System.out.println("distance : " + distanceEndPointToActual);
+				this.render.contentThread(this.texture, end.getX(), end.getY(),
+						(int) (300 * ((distanceEndPointToActual/this.game.getHP()) / 600)), false);
 
 				System.out.println("x : " + end.getX() + " y : " + end.getY());
 				this.addBoostY = true;
@@ -210,14 +215,28 @@ public abstract class AnimationChampionManager extends AnimationManager {
 				this.canMoveX = true;
 				this.canBeCancel = true;
 			} else {
-				this.sprites.get(18).resetSprite();
+				this.canMoveY = false;
+				this.canMoveX = false;
+				this.sprites.get(19).resetSprite();
 				resize(19);
 				this.setAnimationState(19);
-				this.animationRunning = new Animation(this.sprites.get(19), this.texture, 12);
+				this.animationRunning = new Animation(this.sprites.get(19), this.texture, 5);
 				this.animationRunning.start();
-				this.render.contentThread(this.texture,
-						this.texture.getLocation().getX() - championOwner.getLocation().getX(),
-						this.texture.getLocation().getY() - championOwner.getLocation().getY(), 300, false);
+				Point end = new Point((-(XExplosion*this.game.getHP())) + this.texture.getLocation().getX(),
+						-(YExplosion*this.game.getHP()) + this.texture.getLocation().getY());
+
+				double distanceEndPointToActual = Math.sqrt(((end.getX() - this.texture.getLocation().getX())
+						* (end.getX() - this.texture.getLocation().getX()))
+						+ ((end.getY() - this.texture.getLocation().getY())));
+
+				System.out.println("distance : " + distanceEndPointToActual);
+				this.render.contentThread(this.texture, end.getX(), end.getY(),
+						(int) (300 * ((distanceEndPointToActual/(this.game.getHP())) / 600)), false);
+
+				System.out.println("x : " + end.getX() + " y : " + end.getY());
+				this.addBoostY = true;
+				this.canMoveY = true;
+				this.canMoveX = true;
 				this.canBeCancel = true;
 			}
 		}
@@ -225,11 +244,20 @@ public abstract class AnimationChampionManager extends AnimationManager {
 
 	protected void resize(int nbTexture) {
 		float atall = (float) (this.texture.getLocation().getY() + this.texture.getSize().getHeight());
-		float midle = (float) (this.texture.getLocation().getX() + (this.texture.getSize().getWidth() / 2));
+		float midle = (float) ((float) (this.texture.getLocation().getX() + (this.texture.getSize().getWidth() / 2))
+				- 0.5);
 		this.forceSetLocation(midle - (this.sprites.get(nbTexture).getActualSprite().getWidth() / 2),
 				atall - this.sprites.get(nbTexture).getActualSprite().getHeight());
 		this.forceSetSize(this.sprites.get(nbTexture).getActualSprite().getWidth(),
 				this.sprites.get(nbTexture).getActualSprite().getHeight());
 		this.texture.setImage(this.sprites.get(nbTexture).getActualSprite());
+	}
+	
+	public void setHP(float hp) {
+		this.game.setHP(hp);
+	}
+	
+	public float getHP() {
+		return this.game.getHP();
 	}
 }

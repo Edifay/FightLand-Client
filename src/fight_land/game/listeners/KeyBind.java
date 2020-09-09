@@ -14,8 +14,8 @@ public class KeyBind {
 	public static int OTHER_JUMP = 38;
 	public static int OTHER_DOWN = 40;
 	public static int OTHER_ROULADE = 96;
-	public static int OTHER_ATTACK1 = 1;
-	public static int OTHER_ATTACK2 = 2;
-	public static int OTHER_SPECIAL = 65;
+	public static int OTHER_ATTACK1 = 97;
+	public static int OTHER_ATTACK2 = 98;
+	public static int OTHER_SPECIAL = 99;
 	
 }

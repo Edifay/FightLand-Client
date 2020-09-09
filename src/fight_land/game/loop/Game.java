@@ -33,6 +33,7 @@ public class Game {
 	private Boolean ATTACK1 = false;
 	private Boolean ATTACK2 = false;
 	private Boolean SPECIAL = false;
+	private float hp;
 
 	private Boolean otherRIGHT = false;
 	private Boolean otherLEFT = false;
@@ -45,17 +46,18 @@ public class Game {
 
 	public Game(GraphicsRender render) {
 		this.render = render;
-		this.actual_player = new  Texture();
+		this.actual_player = new  Texture(true);
+		this.hp = 1;
 	}
 
 	public void start() {
 		this.champions = new ArrayList<AnimationChampionManager>();
 
-		AnimationMapManager mapAnimation = new AnimationLavaMapManager(this.render, new Texture(),
+		AnimationMapManager mapAnimation = new AnimationLavaMapManager(this.render, new Texture(false),
 				AssetsContener.assets.getMaps().get(0), this);
 		mapAnimation.setVisible(true);
 
-		this.animationManagerForActualPlayer = new AnimationCosmonaute(this.render, new Texture(), // second
+		this.animationManagerForActualPlayer = new AnimationCosmonaute(this.render, new Texture(true), // second
 				AssetsContener.assets.getAllPlayersAndSprites().get(0), this);
 		this.animationManagerForActualPlayer.forceSetLocation(600, 100);
 		this.animationManagerForActualPlayer.forceSetSize(135, 194);
@@ -155,6 +157,14 @@ public class Game {
 
 	public void setATTACK3(Boolean aTTACK3) {
 		SPECIAL = aTTACK3;
+	}
+	
+	public void setHP(float hp) {
+		this.hp = hp;
+	}
+	
+	public float getHP() {
+		return this.hp;
 	}
 
 	public Boolean getOtherRIGHT() {

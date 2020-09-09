@@ -38,7 +38,6 @@ public class GraphicGame extends JPanel {
 
 	@Override
 	protected void paintComponent(Graphics g) {
-		this.render.updateTextureAtRend();
 		Texture[] textures = this.render.getTexturesAtRend();
 		super.paintComponent(g);
 		/*
@@ -52,14 +51,16 @@ public class GraphicGame extends JPanel {
 		g.setColor(Color.black);
 		
 		for (Texture texture : textures) {
-			g.drawImage(texture.getImage(), (int) (texture.getLocation().getX() * this.racio_width),
+			g.drawImage(
+					texture.getImage(), 
+					(int) (texture.getLocation().getX() * this.racio_width),
 					(int) (texture.getLocation().getY() * this.racio_height),
 					(int) (texture.getSize().getWidth() * this.racio_width),
 					(int) (texture.getSize().getHeight() * this.racio_height), null);
-			g.drawRect((int) (texture.getLocation().getX() * this.racio_width),
+			/*g.drawRect((int) (texture.getLocation().getX() * this.racio_width),
 					(int) (texture.getLocation().getY() * this.racio_height),
 					(int) (texture.getSize().getWidth() * this.racio_width),
-					(int) (texture.getSize().getHeight() * this.racio_height));
+					(int) (texture.getSize().getHeight() * this.racio_height));*/
 		}
 	}
 
