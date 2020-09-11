@@ -16,6 +16,10 @@ public class GraphicsRender {
 
 	private Thread tMove;
 
+	private int lastWidth;
+	private int lastX;
+	private int lastY;
+	
 	public GraphicsRender() {
 
 	}
@@ -24,6 +28,9 @@ public class GraphicsRender {
 		this.content = new GraphicGame(this, fight_land.frame.FightLandFrame.frame.getWidth(),
 				fight_land.frame.FightLandFrame.frame.getHeight());
 		this.allTextures = new ArrayList<Texture>();
+		this.lastWidth = 0;
+		this.lastX = 0;
+		this.lastY = 0;
 	}
 
 	public GraphicGame getContent() {
@@ -47,40 +54,60 @@ public class GraphicsRender {
 
 	public synchronized void updateTextureAtRend() {
 		this.texturesAtRend = new Texture[this.allTextures.size()];
-		float x = 100000;
-		float lastX = -1000;
-		float y = 100000;
-		float lastY = -1000;
+		float x = 5000;
+		float endX = -1000;
+		float y = 5000;
+		float endY = -1000;
 
 		for (int i = 0; i < this.allTextures.size(); i++) {
 			if (this.allTextures.get(i).getHaveToBeIn()) {
 				if (this.allTextures.get(i).getLocation().getX() < x) {
-					x = (int) (this.allTextures.get(i).getLocation().getX() - 100);
+					x = (int) (this.allTextures.get(i).getLocation().getX());
 				}
 				if (this.allTextures.get(i).getLocation().getX()
-						+ this.allTextures.get(i).getSize().getWidth() > lastX) {
-					lastX = (int) (this.allTextures.get(i).getLocation().getX()
-							+ this.allTextures.get(i).getSize().getWidth() + 100);
+						+ this.allTextures.get(i).getSize().getWidth() > endX) {
+					endX = (int) (this.allTextures.get(i).getLocation().getX()
+							+ this.allTextures.get(i).getSize().getWidth());
 				}
 				if (this.allTextures.get(i).getLocation().getY() < y) {
-					y = (int) (this.allTextures.get(i).getLocation().getY() - 100);
+					y = (int) (this.allTextures.get(i).getLocation().getY());
 				}
 				if (this.allTextures.get(i).getLocation().getY()
-						+ this.allTextures.get(i).getSize().getHeight() > lastY) {
-					lastY = (int) (this.allTextures.get(i).getLocation().getY()
-							+ this.allTextures.get(i).getSize().getHeight() + 100);
+						+ this.allTextures.get(i).getSize().getHeight() > endY) {
+					endY = (int) (this.allTextures.get(i).getLocation().getY()
+							+ this.allTextures.get(i).getSize().getHeight());
 				}
 			}
 		}
+		
+		x -=300;
+		y -= 300;
+		endX += 300;
+		endY +=300;
 
-		float width = lastX - x;
-		float height = lastY - y;
+		float width = endX - x;
+		float height = endY - y;
 
 		if (width / 1920 > height / 1080) {
 			height = (9 * width) / 16;
 		} else {
 			width = (16 * height) / 9;
 		}
+
+		if (this.lastWidth == 0) {
+			this.lastWidth = (int) width;
+		}
+		width = this.lastWidth - ((float) (this.lastWidth - width) / 50);
+		x = this.lastX - ((float)(this.lastX-x)/50);
+		y = this.lastY - ((float)(this.lastY-y)/50);
+
+		height = (9 * width) / 16;
+
+		this.lastWidth = (int) width;
+		
+		this.lastX = (int) x;
+		this.lastY = (int) y;
+
 		double racio_width = 1920d / width;
 		double racio_height = 1080d / height;
 

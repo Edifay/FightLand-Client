@@ -141,6 +141,7 @@ public class AnimationCosmonaute extends AnimationChampionManager {
 					public void runActionHit(Texture collisionOwner, AnimationChampionManager collisionVictim) {
 						new Thread(() -> {
 							collisionVictim.tilt(false, collisionOwner, 400, 100);
+							collisionVictim.setHP(collisionVictim.getHP() + 0.5f);
 						}).start();
 					}
 

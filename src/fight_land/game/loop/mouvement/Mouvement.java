@@ -58,8 +58,7 @@ public class Mouvement {
 				}
 				
 				if(this.animationManager.addBoostY) {
-					System.out.println("add");
-					this.forceY = -5;
+					this.forceY = -1;
 					this.animationManager.addBoostY = false;
 				}
 

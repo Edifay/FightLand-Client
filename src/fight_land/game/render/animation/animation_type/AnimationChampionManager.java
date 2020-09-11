@@ -208,8 +208,6 @@ public abstract class AnimationChampionManager extends AnimationManager {
 				System.out.println("distance : " + distanceEndPointToActual);
 				this.render.contentThread(this.texture, end.getX(), end.getY(),
 						(int) (300 * ((distanceEndPointToActual/this.game.getHP()) / 600)), false);
-
-				System.out.println("x : " + end.getX() + " y : " + end.getY());
 				this.addBoostY = true;
 				this.canMoveY = true;
 				this.canMoveX = true;
