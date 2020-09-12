@@ -19,7 +19,7 @@ public class GraphicsRender {
 	private int lastWidth;
 	private int lastX;
 	private int lastY;
-
+	
 	public GraphicsRender() {
 
 	}
@@ -28,7 +28,7 @@ public class GraphicsRender {
 		this.content = new GraphicGame(this, fight_land.frame.FightLandFrame.frame.getWidth(),
 				fight_land.frame.FightLandFrame.frame.getHeight());
 		this.allTextures = new ArrayList<Texture>();
-		this.lastWidth = 1920;
+		this.lastWidth = 0;
 		this.lastX = 0;
 		this.lastY = 0;
 	}
@@ -54,10 +54,6 @@ public class GraphicsRender {
 
 	public synchronized void updateTextureAtRend() {
 		this.texturesAtRend = new Texture[this.allTextures.size()];
-//		this.allTextures.toArray(this.texturesAtRend);
-		
-		// add the center of texture with getHaveToBeIn()
-		
 		float x = 5000;
 		float endX = -1000;
 		float y = 5000;
@@ -83,48 +79,44 @@ public class GraphicsRender {
 				}
 			}
 		}
-
-		x -= 300;
+		
+		x -=300;
 		y -= 300;
 		endX += 300;
-		endY += 300;
+		endY +=300;
 
 		float width = endX - x;
 		float height = endY - y;
 
 		if (width / 1920 > height / 1080) {
-			float stock = (9 * width) / 16;
-			y += (height - (stock)) / 2;
-			height = stock;
+			height = (9 * width) / 16;
 		} else {
-			float stock = (16 * height) / 9;
-			x += (width - (stock)) / 2;
-			width = stock;
+			width = (16 * height) / 9;
 		}
 
+		if (this.lastWidth == 0) {
+			this.lastWidth = (int) width;
+		}
 		width = this.lastWidth - ((float) (this.lastWidth - width) / 50);
-		x = this.lastX - ((float) (this.lastX - x) / 50);
-		y = this.lastY - ((float) (this.lastY - y) / 50);
+		x = this.lastX - ((float)(this.lastX-x)/50);
+		y = this.lastY - ((float)(this.lastY-y)/50);
 
 		height = (9 * width) / 16;
 
 		this.lastWidth = (int) width;
-
+		
 		this.lastX = (int) x;
 		this.lastY = (int) y;
 
-		float racio_width = 1920f / width;
-		float racio_height = 1080f / height;
+		double racio_width = 1920d / width;
+		double racio_height = 1080d / height;
 
 		for (int i = 0; i < this.allTextures.size(); i++) {
 			Texture text = this.allTextures.get(i).clone();
-
 			text.setLocation((float) ((text.getLocation().getX() - x) * racio_width),
 					(float) ((text.getLocation().getY() - y) * racio_height));
-
 			text.setSize((int) (text.getSize().getWidth() * racio_width),
 					(int) (text.getSize().getHeight() * racio_height));
-
 			this.texturesAtRend[i] = text;
 		}
 	}

@@ -1,7 +1,6 @@
 package fight_land.game.render.graphics;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -21,28 +20,12 @@ public class GraphicGame extends JPanel {
 	private double racio_height;
 
 	private GraphicsRender render;
-	
-	private int fps;
-	private int actualCount;
 
 	public GraphicGame(GraphicsRender render, int width, int height) {
 		this.setSize(width, height);
 		this.calculateRacio();
 		this.render = render;
 		this.setResizeAction();
-		this.fps = 0;
-		this.actualCount = 0;
-		new Thread(()->{
-			try {
-			while(true) {
-				this.fps = this.actualCount;
-				this.actualCount = 0;
-				Thread.sleep(1000);
-			}
-			}catch (Exception e) {
-				e.printStackTrace();
-			}
-		}).start();
 	}
 
 	private void setResizeAction() {
@@ -61,8 +44,6 @@ public class GraphicGame extends JPanel {
 		 * System.out.println("at Paint: "+ textures.length);
 		 * System.out.println(textures[0]);
 		 */
-		
-		this.actualCount++;
 
 		g.setColor(backgroundColor);
 		g.fillRect(0, 0, this.getWidth(), this.getHeight());
@@ -76,13 +57,11 @@ public class GraphicGame extends JPanel {
 					(int) (texture.getLocation().getY() * this.racio_height),
 					(int) (texture.getSize().getWidth() * this.racio_width),
 					(int) (texture.getSize().getHeight() * this.racio_height), null);
-			/*g.drawRect((int) (texture.getLocation().getX() * this.racio_width),
+			g.drawRect((int) (texture.getLocation().getX() * this.racio_width),
 					(int) (texture.getLocation().getY() * this.racio_height),
 					(int) (texture.getSize().getWidth() * this.racio_width),
-					(int) (texture.getSize().getHeight() * this.racio_height));*/
+					(int) (texture.getSize().getHeight() * this.racio_height));
 		}
-		g.setFont(new Font(null, 1, 25));
-		g.drawString(this.fps+"", 20, 20);
 	}
 
 	public void calculateRacio() {
