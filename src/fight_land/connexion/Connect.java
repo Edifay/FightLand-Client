@@ -9,7 +9,7 @@ public class Connect {
 
 	public static Communication com;
 
-	public static final String ipName = "localhost";
+	public static final String ipName = "92.157.232.250";
 	public static final int port = 7630;
 
 	public static InetAddress ip;

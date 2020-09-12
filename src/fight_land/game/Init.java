@@ -34,7 +34,7 @@ public class Init {
 		frame.setContentPane(render.getContent());// set graphics
 		frame.revalidate();
 		frame.repaint();
-
+		
 		game = new Game(render);
 
 		System.out.println("wait start by server");
