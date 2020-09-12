@@ -15,6 +15,7 @@ public class Sender {
 	public Long responsePingTCP(Long msStack, Packet pack, Receiver receiver) {
 		if (msStack != 0) {
 			receiver.setPingTCP(System.currentTimeMillis() - msStack); 
+			System.out.println("ping TCP : "+(System.currentTimeMillis() - msStack));
 			msStack = 0L;
 			new Thread(() -> {
 				try {
@@ -39,6 +40,7 @@ public class Sender {
 			receiver.setMsStackForRestart(System.currentTimeMillis());
 			receiver.setPingUDP(System.currentTimeMillis() - msStack);
 			msStack = 0L;
+			System.out.println("UDP ping : "+(System.currentTimeMillis() - msStack));
 			new Thread(() -> {
 				try {
 					Thread.sleep(1000);

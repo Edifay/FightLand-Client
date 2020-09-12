@@ -17,14 +17,23 @@ public class Init {
 
 	public static void init(Communication com) {
 
-//		Sender sender = new Sender(com);
-//		netManager = new NetWorkManager(sender, new Receiver(com, sender));
+		netManager = new NetWorkManager(com);
 
 		LoadGame loader = new LoadGame();
 		frame.setContentPane(new GraphicsLoad(loader));
 		frame.revalidate();
 		frame.repaint();
-		loader.start();
+		loader.load(1);
+		loader.load(10);
+		loader.setLoadFinish(true);
+		
+		while(!loader.getLoadFinish()) {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 
 		fight_land.lobby.Init.dispose();// delete LobbyRessources
 

@@ -15,12 +15,30 @@ public class LoadGame {
 
 	public final int atLoad = 3;
 	public int loaded;
+	
+	private Boolean loadFinish;
 
 	public LoadGame() {
-
+		this.loadFinish = false;
 	}
 
-	public void start() {
+	public void load(int textureAtLoad) {
+		switch (textureAtLoad) {
+		case 1: {
+			this.loadCosmonaute();
+			break;
+		}
+		case 10: {
+			this.loadLavaMap();
+			break;
+		}
+		default:
+			System.out.println("Can't Load : " + textureAtLoad);
+			break;
+		}
+	}
+
+	private void loadCosmonaute() {
 		ArrayList<Sprites> sprites1 = new ArrayList<Sprites>();
 
 		try {// load stand right
@@ -60,7 +78,7 @@ public class LoadGame {
 		loaded++;
 
 		assets.getAllPlayersAndSprites().add(sprites1);
-		
+
 		try {// load roulade right
 			sprites1.add(new Sprites(
 					ImageIO.read(getClass().getResource("/assets/game/champions/champion_1/roulade_cosmo.png")), 274,
@@ -74,7 +92,7 @@ public class LoadGame {
 		loaded++;
 
 		assets.getAllPlayersAndSprites().add(sprites1);
-		
+
 		try {// load attack1 right
 			sprites1.add(new Sprites(
 					ImageIO.read(getClass().getResource("/assets/game/champions/champion_1/attack1_cosmo.png")), 227,
@@ -86,7 +104,7 @@ public class LoadGame {
 
 		sprites1.add(sprites1.get(8).getSpritesFlip());
 		loaded++;
-		
+
 		try {// load cosmo moon right
 			sprites1.add(new Sprites(
 					ImageIO.read(getClass().getResource("/assets/game/champions/champion_1/moon_cosmo.png")), 171,
@@ -98,11 +116,10 @@ public class LoadGame {
 
 		sprites1.add(sprites1.get(10).getSpritesFlip());
 		loaded++;
-		
+
 		try {// load moon right
 			sprites1.add(new Sprites(
-					ImageIO.read(getClass().getResource("/assets/game/champions/champion_1/moon_anim.png")), 98,
-					90));
+					ImageIO.read(getClass().getResource("/assets/game/champions/champion_1/moon_anim.png")), 98, 90));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -110,7 +127,7 @@ public class LoadGame {
 
 		sprites1.add(sprites1.get(12).getSpritesFlip());
 		loaded++;
-		
+
 		try {// load cosmo fuze right
 			sprites1.add(new Sprites(
 					ImageIO.read(getClass().getResource("/assets/game/champions/champion_1/fuze_cosmo.png")), 185,
@@ -122,11 +139,10 @@ public class LoadGame {
 
 		sprites1.add(sprites1.get(14).getSpritesFlip());
 		loaded++;
-		
+
 		try {// load fuse right
 			sprites1.add(new Sprites(
-					ImageIO.read(getClass().getResource("/assets/game/champions/champion_1/fuze_anim.png")), 380,
-					360));
+					ImageIO.read(getClass().getResource("/assets/game/champions/champion_1/fuze_anim.png")), 380, 360));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -148,16 +164,15 @@ public class LoadGame {
 		loaded++;
 
 		assets.getAllPlayersAndSprites().add(sprites1);
+	}
 
+	private void loadLavaMap() {
 		try {// load map 1
 			assets.getMaps().add(ImageIO.read(getClass().getResource("/assets/game/maps/lavaCave/cave_hidebox.png")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		loaded++;
-		
-		
-		
 
 		CollisionsDetector.rectanglesCollisions = new ArrayList<Rectangle>();
 		CollisionsDetector.rectanglesCollisions.add(new Rectangle(3, 336, 525, 17));
@@ -165,6 +180,13 @@ public class LoadGame {
 
 		CollisionsDetector.rectanglesCollisions.add(new Rectangle(3, 781, 660, 25));
 		CollisionsDetector.rectanglesCollisions.add(new Rectangle(1256, 781, 575, 25));
+	}
 
+	public Boolean getLoadFinish() {
+		return this.loadFinish;
+	}
+
+	public void setLoadFinish(Boolean loadFinish) {
+		this.loadFinish = loadFinish;
 	}
 }

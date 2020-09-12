@@ -88,7 +88,6 @@ public class MenuRequestManager implements Runnable {
 				System.out.println("startGame");
 				this.com = null;
 				fight_land.game.Init.init(this.com);
-				// TODO start game
 				break;
 			}
 			default:
@@ -126,6 +125,7 @@ public class MenuRequestManager implements Runnable {
 				System.out.println("error read Unknow Error");
 			}
 		}
+		System.out.println("UDP STOPPED");
 	}
 
 	private void secureUDPPing() {

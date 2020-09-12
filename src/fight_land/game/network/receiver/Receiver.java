@@ -28,7 +28,7 @@ public class Receiver {
 			this.manageUDP();
 		}).start();
 	}
-	
+
 	public void manageTCP() {
 		Long msStack = 0L;
 
@@ -37,10 +37,13 @@ public class Receiver {
 			pack = this.com.nextPacket(Communication.TCP);
 
 			switch (pack.getPacketNumber()) {// REQUEST FOR PING
-			case 0: {
+			case 0:
 				msStack = this.sender.responsePingTCP(msStack, pack, this);
 				break;
-			}
+
+			case 1: // get fich at Load
+				break;
+
 			default:
 				System.out.println("error read Unknow Error");
 			}
@@ -57,8 +60,6 @@ public class Receiver {
 
 	public void manageUDP() {
 		Packet pack;
-
-		this.com.writeNextPacket(null, Communication.UDP, new Packet(0));
 
 		Long msStack = 0L;
 
@@ -120,18 +121,23 @@ public class Receiver {
 		}
 		return null;
 	}
+
 	public void setPingTCP(long ping) {
 		this.pingTCP = ping;
 	}
+
 	public void setPingUDP(long ping) {
 		this.pingUDP = ping;
 	}
+
 	public void setMsStackForRestart(long ms) {
 		msStackForRestart = ms;
 	}
+
 	public long getPingTCP() {
 		return this.pingTCP;
 	}
+
 	public long getPingUDP() {
 		return this.pingUDP;
 	}
