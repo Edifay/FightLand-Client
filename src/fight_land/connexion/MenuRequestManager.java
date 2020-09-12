@@ -86,8 +86,8 @@ public class MenuRequestManager implements Runnable {
 			}
 			case 6: {// start game
 				System.out.println("startGame");
-				this.com = null;
 				fight_land.game.Init.init(this.com);
+				this.com = null;
 				break;
 			}
 			default:

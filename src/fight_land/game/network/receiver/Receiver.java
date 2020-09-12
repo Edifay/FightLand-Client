@@ -22,7 +22,7 @@ public class Receiver {
 		this.com = com;
 		this.sender = sender;
 		new Thread(() -> {// start manage TCP
-
+			this.manageTCP();
 		}).start();
 		new Thread(() -> {// start manage UDP
 			this.manageUDP();
