@@ -14,18 +14,16 @@ public class Init {
 	public static GraphicsRender render;
 	public static Game game;
 	public static NetWorkManager netManager;
+	public static LoadGame loader;
 
 	public static void init(Communication com) {
 
 		netManager = new NetWorkManager(com);
 
-		LoadGame loader = new LoadGame();
+		loader = new LoadGame();
 		frame.setContentPane(new GraphicsLoad(loader));
 		frame.revalidate();
 		frame.repaint();
-		loader.load(1);
-		loader.load(10);
-		loader.setLoadFinish(true);
 		
 		while(!loader.getLoadFinish()) {
 			try {

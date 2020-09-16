@@ -24,7 +24,7 @@ public class LoadGame {
 
 	public void load(int textureAtLoad) {
 		switch (textureAtLoad) {
-		case 1: {
+		case 0: {
 			this.loadCosmonaute();
 			break;
 		}

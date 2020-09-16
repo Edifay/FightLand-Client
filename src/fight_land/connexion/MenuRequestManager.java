@@ -156,13 +156,21 @@ public class MenuRequestManager implements Runnable {
 					e.printStackTrace();
 				}
 				try {
-					this.com.writeNextPacket(null, Communication.UDP, new Packet(0));
+					try {
+						this.com.writeNextPacket(null, Communication.UDP, new Packet(0));
+					} catch (Exception e) {
+						System.out.println("ERROR NORMAL");
+					}
 				} catch (Exception e) {
 				}
 			}).start();
 		} else {
 			msStack = System.currentTimeMillis();
-			this.com.writeNextPacket(null, Communication.UDP, pack);
+			try {
+				this.com.writeNextPacket(null, Communication.UDP, pack);
+			} catch (Exception e) {
+				System.out.println("ERROR NORMAL");
+			}
 		}
 		return msStack;
 	}

@@ -5,7 +5,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
+import fight_land.game.Init;
 import fight_land.game.network.send.Sender;
 import networkAPI.Communication;
 import networkAPI.Packet;
@@ -40,8 +42,27 @@ public class Receiver {
 			case 0:
 				msStack = this.sender.responsePingTCP(msStack, pack, this);
 				break;
-
 			case 1: // get fich at Load
+				@SuppressWarnings("unchecked")
+				ArrayList<Integer> nbAtLoad = (ArrayList<Integer>) readDataByteToObject(pack.getData().get(0));
+				new Thread(() -> {
+					ArrayList<Integer> nbAfter = new ArrayList<Integer>();
+					for (int i = 0; i < nbAtLoad.size(); i++) {
+						Boolean find = false;
+						for (int a = 0; a < nbAfter.size(); a++) {
+							if (nbAfter.get(a).intValue() == nbAtLoad.get(i).intValue()) {
+								find = true;
+							}
+						}
+						if (!find)
+							nbAfter.add(nbAtLoad.get(i));
+
+					}
+					for (int i = 0; i < nbAfter.size(); i++)
+						Init.loader.load(nbAfter.get(i).intValue());
+
+					Init.loader.setLoadFinish(true);
+				}).start();
 				break;
 
 			default:
