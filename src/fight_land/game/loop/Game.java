@@ -109,7 +109,7 @@ public class Game {
 					System.out.println("Can't create this: " + this.players.get(i).getTextureNumber());
 					break;
 				}
-				System.out.println("Creation du players :"+this.players.get(i).getName());
+				System.out.println("Creation du players :" + this.players.get(i).getName());
 				this.players.get(i).getAnimationManger().forceSetLocation(250, 100);
 				this.players.get(i).getAnimationManger().forceSetSize(200, 200);
 				this.players.get(i).getAnimationManger().setVisible(true);
@@ -286,7 +286,7 @@ public class Game {
 	public void setPlayer_loaded(Boolean player_loaded) {
 		this.player_loaded = player_loaded;
 	}
-	
+
 	public ArrayList<Player> getPlayers() {
 		return this.players;
 	}
