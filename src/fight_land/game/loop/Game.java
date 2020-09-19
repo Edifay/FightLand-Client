@@ -7,12 +7,10 @@ import java.util.ArrayList;
 import fight_land.AssetsContener;
 import fight_land.game.listeners.GameListeners;
 import fight_land.game.loop.mouvement.Mouvement;
-import fight_land.game.loop.mouvement.MouvementOther;
 import fight_land.game.render.GraphicsRender;
 import fight_land.game.render.animation.animation_type.AnimationChampionManager;
 import fight_land.game.render.animation.animation_type.AnimationMapManager;
 import fight_land.game.render.animation.specific_animation.animationChampion.AnimationCosmonaute;
-import fight_land.game.render.animation.specific_animation.map.AnimationLavaMapManager;
 import fight_land.game.render.graphics.Texture;
 
 public class Game {
@@ -22,7 +20,11 @@ public class Game {
 	private Mouvement mouvementActual_Player;
 	private AnimationChampionManager animationManagerForActualPlayer;
 
+	public static Boolean serverSendStart = false;
+
 	private ArrayList<AnimationChampionManager> champions;
+	private ArrayList<Player> players;
+	private Boolean player_loaded;
 
 	private Thread loop;
 	private Boolean RIGHT = false;
@@ -46,46 +48,84 @@ public class Game {
 
 	public Game(GraphicsRender render) {
 		this.render = render;
-		this.actual_player = new  Texture(true);
+		this.actual_player = new Texture(true);
 		this.hp = 1;
+		this.players = new ArrayList<Player>();
+		this.setPlayer_loaded(false);
+		this.player_loaded = false;
 	}
 
 	public void start() {
 		this.champions = new ArrayList<AnimationChampionManager>();
 
-		AnimationMapManager mapAnimation = new AnimationLavaMapManager(this.render, new Texture(false),
+		AnimationMapManager mapAnimation = new AnimationMapManager(this.render, new Texture(false),
 				AssetsContener.assets.getMaps().get(0), this);
 		mapAnimation.setVisible(true);
 
-		this.animationManagerForActualPlayer = new AnimationCosmonaute(this.render, new Texture(true), // second
-				AssetsContener.assets.getAllPlayersAndSprites().get(0), this);
-		this.animationManagerForActualPlayer.forceSetLocation(600, 100);
-		this.animationManagerForActualPlayer.forceSetSize(135, 194);
-		this.animationManagerForActualPlayer.setVisible(true);
-		this.animationManagerForActualPlayer.setAnimationState(0);
-		this.animationManagerForActualPlayer.stand(true);
+		while (!this.player_loaded) {
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 
-		this.champions.add(this.animationManagerForActualPlayer);
+		for (int i = 0; i < this.players.size(); i++) {
+			if (this.players.get(i).getIsMe()) {// if the actual player
+				System.out.println("Creation du players : YOU !");
 
-		new MouvementOther(this, this.animationManagerForActualPlayer).start();
+				this.actual_player = new Texture(true);
 
-		this.animationManagerForActualPlayer = new AnimationCosmonaute(this.render, this.actual_player,
-				AssetsContener.assets.getAllPlayersAndSprites().get(0), this);
-		this.animationManagerForActualPlayer.forceSetLocation(250, 100);
-		this.animationManagerForActualPlayer.forceSetSize(135, 194);
-		this.animationManagerForActualPlayer.setVisible(true);
-		this.animationManagerForActualPlayer.setAnimationState(0);
-		this.animationManagerForActualPlayer.stand(true);
+				// Selection of the good AnimationMangerAndSprites
+				switch (this.players.get(i).getTextureNumber()) {
+				case 0:
+					this.animationManagerForActualPlayer = new AnimationCosmonaute(this.render, this.actual_player,
+							this);
+					break;
 
-		this.champions.add(this.animationManagerForActualPlayer);
+				default:
+					System.out.println("Can't create this: " + this.players.get(i).getTextureNumber());
+					break;
+				}
+				// creating Mouvement
+				this.mouvementActual_Player = new Mouvement(this, this.animationManagerForActualPlayer);
 
-		this.mouvementActual_Player = new Mouvement(this, this.animationManagerForActualPlayer);
-		this.mouvementActual_Player.start();
-		
+				this.players.get(i).setTexture(this.actual_player);
+				this.players.get(i).setAnimationManger(this.animationManagerForActualPlayer);
+				this.players.get(i).getAnimationManger().forceSetLocation(250, 100);
+				this.players.get(i).getAnimationManger().forceSetSize(10, 10);
+				this.players.get(i).getAnimationManger().setVisible(true);
+				this.players.get(i).getAnimationManger().stand(true);
+
+			} else {
+				this.players.get(i).setTexture(new Texture(true));
+				switch (this.players.get(i).getTextureNumber()) {
+				case 0:
+					this.players.get(i).setAnimationManger(
+							new AnimationCosmonaute(this.render, this.players.get(i).getTexture(), this));
+					break;
+
+				default:
+					System.out.println("Can't create this: " + this.players.get(i).getTextureNumber());
+					break;
+				}
+				System.out.println("Creation du players :"+this.players.get(i).getName());
+				this.players.get(i).getAnimationManger().forceSetLocation(250, 100);
+				this.players.get(i).getAnimationManger().forceSetSize(200, 200);
+				this.players.get(i).getAnimationManger().setVisible(true);
+				this.players.get(i).getAnimationManger().stand(true);
+			}
+		}
+
+//		while (!serverSendStart) {
+//		}
+
 		// ADD listeners
 		GameListeners gameListeners = new GameListeners(this);
 		frame.addKeyListener(gameListeners);
 		frame.addMouseListener(gameListeners);
+
+		this.mouvementActual_Player.start();
 
 		this.loop = new Thread(new Loop(this));
 		this.loop.start();
@@ -158,11 +198,11 @@ public class Game {
 	public void setATTACK3(Boolean aTTACK3) {
 		SPECIAL = aTTACK3;
 	}
-	
+
 	public void setHP(float hp) {
 		this.hp = hp;
 	}
-	
+
 	public float getHP() {
 		return this.hp;
 	}
@@ -238,7 +278,16 @@ public class Game {
 	public void setOtherSPECIAL(Boolean otherSPECIAL) {
 		this.otherSPECIAL = otherSPECIAL;
 	}
-	
-	
 
+	public Boolean getPlayer_loaded() {
+		return this.player_loaded;
+	}
+
+	public void setPlayer_loaded(Boolean player_loaded) {
+		this.player_loaded = player_loaded;
+	}
+	
+	public ArrayList<Player> getPlayers() {
+		return this.players;
+	}
 }

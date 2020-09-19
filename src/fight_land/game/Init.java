@@ -19,7 +19,12 @@ public class Init {
 	public static void init(Communication com) {
 
 		netManager = new NetWorkManager(com);
-
+		
+		render = new GraphicsRender();// create render
+		render.create();
+		
+		game = new Game(render);// create game
+		
 		loader = new LoadGame();
 		frame.setContentPane(new GraphicsLoad(loader));
 		frame.revalidate();
@@ -35,15 +40,10 @@ public class Init {
 
 		fight_land.lobby.Init.dispose();// delete LobbyRessources
 
-		render = new GraphicsRender();// create render
-		render.create();
-
 		frame.setContentPane(render.getContent());// set graphics
 		frame.revalidate();
 		frame.repaint();
 		
-		game = new Game(render);
-
 		System.out.println("wait start by server");
 
 		game.start();

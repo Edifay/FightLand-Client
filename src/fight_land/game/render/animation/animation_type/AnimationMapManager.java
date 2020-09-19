@@ -7,7 +7,7 @@ import fight_land.game.render.GraphicsRender;
 import fight_land.game.render.animation.AnimationManager;
 import fight_land.game.render.graphics.Texture;
 
-public abstract class AnimationMapManager extends AnimationManager {
+public class AnimationMapManager extends AnimationManager {
 
 	public AnimationMapManager(GraphicsRender render, Texture texture, BufferedImage img, Game game) {
 		super(render, texture, game);

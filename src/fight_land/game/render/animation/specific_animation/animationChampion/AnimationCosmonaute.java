@@ -1,20 +1,18 @@
 package fight_land.game.render.animation.specific_animation.animationChampion;
 
-import java.util.ArrayList;
-
+import fight_land.AssetsContener;
 import fight_land.game.loop.Game;
 import fight_land.game.render.GraphicsRender;
 import fight_land.game.render.animation.Animation;
 import fight_land.game.render.animation.animation_type.AnimationChampionManager;
 import fight_land.game.render.collisions.ActionHit;
 import fight_land.game.render.collisions.HitDetector;
-import fight_land.game.render.graphics.Sprites;
 import fight_land.game.render.graphics.Texture;
 
 public class AnimationCosmonaute extends AnimationChampionManager {
 
-	public AnimationCosmonaute(GraphicsRender render, Texture texture, ArrayList<Sprites> sprites, Game game) {
-		super(render, texture, sprites, game);
+	public AnimationCosmonaute(GraphicsRender render, Texture texture, Game game) {
+		super(render, texture, AssetsContener.assets.getCosmonauteSprites(), game);
 	}
 
 	public synchronized void attack3(Boolean canBeCancel) {

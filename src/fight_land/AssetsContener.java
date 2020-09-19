@@ -12,12 +12,12 @@ public class AssetsContener {
 	private ArrayList<BufferedImage> backgrounds;
 	private ArrayList<BufferedImage> IconHero;
 	private ArrayList<BufferedImage> Maps;
-	private ArrayList<ArrayList<Sprites>> allPlayersAndSprites;
+	private ArrayList<Sprites> cosmonauteSprites;
 
 	public AssetsContener() {
 		this.backgrounds = new ArrayList<BufferedImage>();
 		this.IconHero = new ArrayList<BufferedImage>();
-		this.allPlayersAndSprites = new ArrayList<ArrayList<Sprites>>();
+		this.cosmonauteSprites = new ArrayList<Sprites>();
 		this.Maps = new ArrayList<BufferedImage>();
 	}
 
@@ -33,8 +33,12 @@ public class AssetsContener {
 		return IconHero;
 	}
 
-	public ArrayList<ArrayList<Sprites>> getAllPlayersAndSprites() {
-		return this.allPlayersAndSprites;
+	public ArrayList<Sprites> getCosmonauteSprites() {
+		return this.cosmonauteSprites;
+	}
+	
+	public void setComonauteSprites(ArrayList<Sprites> sprites) {
+		this.cosmonauteSprites = sprites;
 	}
 
 	public ArrayList<BufferedImage> getMaps() {

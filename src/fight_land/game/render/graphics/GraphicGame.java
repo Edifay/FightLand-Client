@@ -9,6 +9,7 @@ import java.awt.event.ComponentListener;
 
 import javax.swing.JPanel;
 
+import fight_land.game.Init;
 import fight_land.game.render.GraphicsRender;
 
 public class GraphicGame extends JPanel {
@@ -83,6 +84,8 @@ public class GraphicGame extends JPanel {
 		}
 		g.setFont(new Font(null, 1, 25));
 		g.drawString(this.fps+"", 20, 20);
+		g.drawString(Init.netManager.getReceiver().getPingUDP()+"", 20, 40);
+		g.drawString(Init.netManager.getReceiver().getPingTCP()+"", 20, 60);
 	}
 
 	public void calculateRacio() {

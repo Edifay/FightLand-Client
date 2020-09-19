@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import fight_land.game.Init;
+import fight_land.game.loop.Player;
 import fight_land.game.network.send.Sender;
 import networkAPI.Communication;
 import networkAPI.Packet;
@@ -43,6 +44,7 @@ public class Receiver {
 				msStack = this.sender.responsePingTCP(msStack, pack, this);
 				break;
 			case 1: // get fich at Load
+
 				@SuppressWarnings("unchecked")
 				ArrayList<Integer> nbAtLoad = (ArrayList<Integer>) readDataByteToObject(pack.getData().get(0));
 				new Thread(() -> {
@@ -63,6 +65,23 @@ public class Receiver {
 
 					Init.loader.setLoadFinish(true);
 				}).start();
+				break;
+
+			case 2:
+				ArrayList<byte[]> bytes = pack.getData();
+				for (int i = 0; i < bytes.size(); i++) {
+					@SuppressWarnings("unchecked")
+					ArrayList<Object> playerInfo = (ArrayList<Object>) readDataByteToObject(bytes.get(i));
+					
+					Init.game.getPlayers().add(new Player((Long) playerInfo.get(0), (Boolean) playerInfo.get(1),
+							(Integer) playerInfo.get(2), (String) playerInfo.get(3)));
+
+					System.out.println("Creation du perso ID :" + (long) playerInfo.get(0) + " YOU ? : "
+							+ (Boolean) playerInfo.get(1) + " Texture Select : " + (int) playerInfo.get(2) + " Name : "
+							+ (String) playerInfo.get(3));
+
+				}
+				Init.game.setPlayer_loaded(true);
 				break;
 
 			default:

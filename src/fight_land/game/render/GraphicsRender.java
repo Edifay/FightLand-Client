@@ -54,10 +54,10 @@ public class GraphicsRender {
 
 	public synchronized void updateTextureAtRend() {
 		this.texturesAtRend = new Texture[this.allTextures.size()];
-//		this.allTextures.toArray(this.texturesAtRend);
+		this.allTextures.toArray(this.texturesAtRend);
 		
 		// add the center of texture with getHaveToBeIn()
-		
+		/*
 		float x = 5000;
 		float endX = -1000;
 		float y = 5000;
@@ -126,7 +126,7 @@ public class GraphicsRender {
 					(int) (text.getSize().getHeight() * racio_height));
 
 			this.texturesAtRend[i] = text;
-		}
+		}*/
 	}
 
 	public void remove(Texture texture) {
