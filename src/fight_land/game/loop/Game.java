@@ -25,6 +25,8 @@ public class Game {
 	private ArrayList<AnimationChampionManager> champions;
 	private ArrayList<Player> players;
 	private Boolean player_loaded;
+	
+	public static Player actual_Player_Obj;
 
 	private Thread loop;
 	private Boolean RIGHT = false;
@@ -96,6 +98,8 @@ public class Game {
 				this.players.get(i).getAnimationManger().forceSetSize(10, 10);
 				this.players.get(i).getAnimationManger().setVisible(true);
 				this.players.get(i).getAnimationManger().stand(true);
+				
+				actual_Player_Obj = this.players.get(i);
 
 			} else {
 				this.players.get(i).setTexture(new Texture(true));
@@ -289,5 +293,9 @@ public class Game {
 
 	public ArrayList<Player> getPlayers() {
 		return this.players;
+	}
+	
+	public AnimationChampionManager getAnimationManger() {
+		return this.animationManagerForActualPlayer;
 	}
 }

@@ -72,7 +72,7 @@ public class Receiver {
 				for (int i = 0; i < bytes.size(); i++) {
 					@SuppressWarnings("unchecked")
 					ArrayList<Object> playerInfo = (ArrayList<Object>) readDataByteToObject(bytes.get(i));
-					
+
 					Init.game.getPlayers().add(new Player((Long) playerInfo.get(0), (Boolean) playerInfo.get(1),
 							(Integer) playerInfo.get(2), (String) playerInfo.get(3)));
 
@@ -110,12 +110,30 @@ public class Receiver {
 
 			switch (pack.getPacketNumber()) {
 
-			case 0: {// request for ping
+			case 0: // request for ping
 				msStack = this.sender.responsePingUDP(pack, msStack, this);
 				break;
-			}
+
+			case 1: // get Location player
+				long ID = (long) readDataByteToObject(pack.getData().get(0));
+
+				for (int i = 0; i < Init.game.getPlayers().size(); i++) {
+					if (Init.game.getPlayers().get(i).getID() == ID && !Init.game.getPlayers().get(i).getIsMe()) {
+//						System.out.println("Get Location Player :" + Init.game.getPlayers().get(i).getName());
+						Init.game.getPlayers().get(i).getAnimationManger().forceSetMove(
+								(int) readDataByteToObject(pack.getData().get(1)),
+								(int) readDataByteToObject(pack.getData().get(2)), 25, true);
+						int animationState = (int) readDataByteToObject(pack.getData().get(3));
+						if (Init.game.getPlayers().get(i).getAnimationManger().getAnimationState() != animationState) {
+							Init.game.getPlayers().get(i).getAnimationManger().startAnimationNumber(animationState);
+						}
+						break;
+					}
+				}
+				break;
 			default:
-				System.out.println("error read Unknow Error");
+				System.out.println("error read Unknow Error :"+pack.getPacketNumber());
+				break;
 			}
 		}
 	}
@@ -133,10 +151,10 @@ public class Receiver {
 					e.printStackTrace();
 				}
 			}
-		}).start();
+		})/*.start();*/;
 	}
 
-	public Object readDataByteToObject(byte[] data) {
+	public static Object readDataByteToObject(byte[] data) {
 		ByteArrayInputStream in = new ByteArrayInputStream(data);
 		try {
 			ObjectInputStream inObj = new ObjectInputStream(in);

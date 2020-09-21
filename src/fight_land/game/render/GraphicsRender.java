@@ -1,6 +1,5 @@
 package fight_land.game.render;
 
-import java.awt.Point;
 import java.util.ArrayList;
 
 import fight_land.game.render.graphics.GraphicGame;
@@ -13,8 +12,6 @@ public class GraphicsRender {
 	private ArrayList<Texture> allTextures;
 
 	private Texture[] texturesAtRend;
-
-	private Thread tMove;
 
 	private int lastWidth;
 	private int lastX;
@@ -55,9 +52,9 @@ public class GraphicsRender {
 	public synchronized void updateTextureAtRend() {
 		this.texturesAtRend = new Texture[this.allTextures.size()];
 		this.allTextures.toArray(this.texturesAtRend);
-		
+
 		// add the center of texture with getHaveToBeIn()
-		/*
+
 		float x = 5000;
 		float endX = -1000;
 		float y = 5000;
@@ -126,7 +123,8 @@ public class GraphicsRender {
 					(int) (text.getSize().getHeight() * racio_height));
 
 			this.texturesAtRend[i] = text;
-		}*/
+		}
+
 	}
 
 	public void remove(Texture texture) {
@@ -134,7 +132,7 @@ public class GraphicsRender {
 	}
 
 	public synchronized void setLocationTexture(Texture texture, float x, float y) {
-		this.tMove = new Thread();
+		texture.setTMove(new Thread());
 		texture.setLocation(x, y);
 	}
 
@@ -147,15 +145,12 @@ public class GraphicsRender {
 		texture.setSize(width, height);
 	}
 
-	public void moveTexture(Texture texture, double x, double y, int timeToGo, Boolean stoppable) {
-		setThreadMove(texture, x, y, timeToGo, stoppable);
-		this.tMove.start();
-	}
-
-	private void setThreadMove(Texture texture, double x, double y, int timeToGo, Boolean stoppable) {
-		this.tMove = new Thread(() -> {
+	public synchronized void moveTexture(Texture texture, double x, double y, int timeToGo, Boolean stoppable) {
+		Thread t = new Thread(() -> {
 			contentThread(texture, x, y, timeToGo, stoppable);
 		});
+		t.start();
+		texture.setTMove(t);
 	}
 
 	public Boolean containt(Texture texture) {
@@ -165,33 +160,39 @@ public class GraphicsRender {
 	public void contentThread(Texture texture, double x, double y, int timeToGo, Boolean stoppable) {
 		int firstPointX = (int) texture.getLocation().getX();
 		int firstPointY = (int) texture.getLocation().getY();
-		Point vector = new Point((int) (x - texture.getLocation().getX()), (int) (y - texture.getLocation().getY()));
 
-		double distance = Math.sqrt(((vector.getX() - texture.getLocation().getX())
-				* (vector.getX() - texture.getLocation().getX()))
-				+ ((vector.getY() - texture.getLocation().getY()) * (vector.getY() - texture.getLocation().getY())));
+		double distance = Math.sqrt(((x - texture.getLocation().getX()) * (x - texture.getLocation().getX()))
+				+ ((y - texture.getLocation().getY()) * (y - texture.getLocation().getY())));
 
-		int distanceX = (int) (x - texture.getLocation().getX());
-		double pas = distanceX / distance;
-		double racio_vec = vector.getY() / vector.getX();
+		int distanceX = (int) (x - firstPointX);
+		int distanceY = (int) (y - firstPointY);
+		double pasX = distanceX / distance;
+		double pasY = distanceY / distance;
 		double time = (timeToGo / distance);
 
 		double endTime = System.currentTimeMillis() + (timeToGo);
 
-		for (int i = 0; i < distance + 1; i++) {
-			if (stoppable) {
-				if (this.tMove != Thread.currentThread()) {// if the Thread is always the actualmove
-					break;
-				}
-			}
-
-			double tempsRestant = endTime - System.currentTimeMillis();
-			i = (int) ((timeToGo - tempsRestant) / time);
-
-			texture.setLocation((float) (firstPointX + (pas * i)), (float) (firstPointY + ((pas * i) * racio_vec)));
-
+		if (distance != 0) {
 			try {
-				Thread.sleep(1);
+				for (int i = 0; i < distance + 1; i++) {
+					if (stoppable) {
+//						System.out.println(texture.getTMove().getId() + " || " + Thread.currentThread().getId());
+						if (texture.getTMove().getId() - 1 != Thread.currentThread().getId()
+								&& texture.getTMove().getId() != Thread.currentThread().getId()) {// if the Thread is
+																									// always the
+																									// actualmove.
+							break;
+						}
+					}
+					double tempsRestant = endTime - System.currentTimeMillis();
+					i = (int) ((timeToGo - tempsRestant) / time);
+
+					texture.setLocation((float) (firstPointX + (pasX * i)), (float) (firstPointY + (pasY * i)));
+//					System.out.println(
+//							"Location x: " + texture.getLocation().getX() + " y:" + texture.getLocation().getY());
+
+					Thread.sleep(1);
+				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

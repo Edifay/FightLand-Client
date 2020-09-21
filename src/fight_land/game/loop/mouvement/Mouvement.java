@@ -252,7 +252,7 @@ public class Mouvement {
 
 	private void put0AtForce(double timeWaited, Boolean collisionResult) {
 		if (collisionResult) {
-			if (this.animationManager.getAnimationState() != 0) {
+			if (this.animationManager.getAnimationState() != 0 && this.animationManager.getAnimationState() != 1) {
 				this.animationManager.stand(true);
 			}
 		} else {

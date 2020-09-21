@@ -40,12 +40,13 @@ public abstract class AnimationChampionManager extends AnimationManager {
 		if (this.canBeCancel) {
 			this.canBeCancel = canBeCancel;
 			super.stopActualAnimation();
-			this.setAnimationState(0);
 			if (this.texture.getRightOrLeft()) {
+				this.setAnimationState(0);
 				resize(0);
 				this.animationRunning = new Animation(this.sprites.get(0), this.texture, 40);
 				this.animationRunning.start();
 			} else {
+				this.setAnimationState(1);
 				resize(1);
 				this.animationRunning = new Animation(this.sprites.get(1), this.texture, 40);
 				this.animationRunning.start();
@@ -257,5 +258,52 @@ public abstract class AnimationChampionManager extends AnimationManager {
 	
 	public float getHP() {
 		return this.game.getHP();
+	}
+	
+	public synchronized void startAnimationNumber(int AnimationState) {
+		super.stopActualAnimation();
+		switch (AnimationState) {
+		case 0:
+			basicalAnimationOther(AnimationState, 40);
+			break;
+		case 1:
+			basicalAnimationOther(AnimationState, 40);
+			break;
+		case 2:
+			basicalAnimationOther(AnimationState, 25);
+			break;
+		case 3:
+			basicalAnimationOther(AnimationState, 25);
+			break;
+		case 4:
+			basicalAnimationOther(AnimationState, 5);
+			break;
+		case 5:
+			basicalAnimationOther(AnimationState, 5);
+			break;
+		case 6:
+			basicalAnimationOther(AnimationState, 3);
+			break;
+		case 7:
+			basicalAnimationOther(AnimationState, 3);
+			break;
+		case 8:
+			basicalAnimationOther(AnimationState, 9);
+			break;
+		case 9:
+			basicalAnimationOther(AnimationState, 9);
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	private synchronized void basicalAnimationOther(int number, int timer) {
+		this.setAnimationState(number);
+		resize(number);
+		this.sprites.get(number).resetSprite();
+		this.animationRunning = new Animation(this.sprites.get(number), this.texture, (int) timer);
+		this.animationRunning.start();
 	}
 }

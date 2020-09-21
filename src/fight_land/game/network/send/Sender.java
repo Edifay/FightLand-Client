@@ -58,5 +58,14 @@ public class Sender {
 		}
 		return msStack;
 	}
+	
+	public void sendLocation(long ID, int x, int y, int animationState) {
+		Packet pack = new Packet(1);
+		pack.add(Receiver.getDataByte(ID));
+		pack.add(Receiver.getDataByte(x));
+		pack.add(Receiver.getDataByte(y));
+		pack.add(Receiver.getDataByte(animationState));
+		this.com.writeNextPacket(null, Communication.UDP, pack);
+	}
 
 }
