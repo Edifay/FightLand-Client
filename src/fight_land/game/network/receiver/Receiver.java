@@ -47,24 +47,22 @@ public class Receiver {
 
 				@SuppressWarnings("unchecked")
 				ArrayList<Integer> nbAtLoad = (ArrayList<Integer>) readDataByteToObject(pack.getData().get(0));
-				new Thread(() -> {
-					ArrayList<Integer> nbAfter = new ArrayList<Integer>();
-					for (int i = 0; i < nbAtLoad.size(); i++) {
-						Boolean find = false;
-						for (int a = 0; a < nbAfter.size(); a++) {
-							if (nbAfter.get(a).intValue() == nbAtLoad.get(i).intValue()) {
-								find = true;
-							}
+				ArrayList<Integer> nbAfter = new ArrayList<Integer>();
+				for (int i = 0; i < nbAtLoad.size(); i++) {
+					Boolean find = false;
+					for (int a = 0; a < nbAfter.size(); a++) {
+						if (nbAfter.get(a).intValue() == nbAtLoad.get(i).intValue()) {
+							find = true;
 						}
-						if (!find)
-							nbAfter.add(nbAtLoad.get(i));
-
 					}
-					for (int i = 0; i < nbAfter.size(); i++)
-						Init.loader.load(nbAfter.get(i).intValue());
+					if (!find)
+						nbAfter.add(nbAtLoad.get(i));
 
-					Init.loader.setLoadFinish(true);
-				}).start();
+				}
+				for (int i = 0; i < nbAfter.size(); i++)
+					Init.loader.load(nbAfter.get(i).intValue());
+
+				Init.loader.setLoadFinish(true);
 				break;
 
 			case 2:
@@ -76,9 +74,9 @@ public class Receiver {
 					Init.game.getPlayers().add(new Player((Long) playerInfo.get(0), (Boolean) playerInfo.get(1),
 							(Integer) playerInfo.get(2), (String) playerInfo.get(3)));
 
-					System.out.println("Creation du perso ID :" + (long) playerInfo.get(0) + " YOU ? : "
-							+ (Boolean) playerInfo.get(1) + " Texture Select : " + (int) playerInfo.get(2) + " Name : "
-							+ (String) playerInfo.get(3));
+//					System.out.println("Creation du perso ID :" + (long) playerInfo.get(0) + " YOU ? : "
+//							+ (Boolean) playerInfo.get(1) + " Texture Select : " + (int) playerInfo.get(2) + " Name : "
+//							+ (String) playerInfo.get(3));
 
 				}
 				Init.game.setPlayer_loaded(true);
@@ -111,7 +109,8 @@ public class Receiver {
 			switch (pack.getPacketNumber()) {
 
 			case 0: // request for ping
-				msStack = this.sender.responsePingUDP(pack, msStack, this);
+				System.out.println("ping");
+//				msStack = this.sender.responsePingUDP(pack, msStack, this);
 				break;
 
 			case 1: // get Location player
@@ -132,7 +131,7 @@ public class Receiver {
 				}
 				break;
 			default:
-				System.out.println("error read Unknow Error :"+pack.getPacketNumber());
+				System.out.println("error read Unknow Error :" + pack.getPacketNumber());
 				break;
 			}
 		}
@@ -151,7 +150,7 @@ public class Receiver {
 					e.printStackTrace();
 				}
 			}
-		})/*.start();*/;
+		})/* .start(); */;
 	}
 
 	public static Object readDataByteToObject(byte[] data) {

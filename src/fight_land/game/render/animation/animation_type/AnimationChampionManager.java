@@ -7,6 +7,8 @@ import fight_land.game.loop.Game;
 import fight_land.game.render.GraphicsRender;
 import fight_land.game.render.animation.Animation;
 import fight_land.game.render.animation.AnimationManager;
+import fight_land.game.render.collisions.ActionHit;
+import fight_land.game.render.collisions.HitDetector;
 import fight_land.game.render.graphics.Sprites;
 import fight_land.game.render.graphics.Texture;
 
@@ -292,6 +294,18 @@ public abstract class AnimationChampionManager extends AnimationManager {
 			break;
 		case 9:
 			basicalAnimationOther(AnimationState, 9);
+			break;
+		case 10:
+			basicalAnimationOther(AnimationState, 6);
+			break;
+		case 11:
+			basicalAnimationOther(AnimationState, 6);
+			break;
+		case 14:
+			basicalAnimationOther(AnimationState, 15);
+			break;
+		case 15:
+			basicalAnimationOther(AnimationState, 15);
 			break;
 
 		default:
