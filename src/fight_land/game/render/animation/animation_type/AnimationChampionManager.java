@@ -7,8 +7,6 @@ import fight_land.game.loop.Game;
 import fight_land.game.render.GraphicsRender;
 import fight_land.game.render.animation.Animation;
 import fight_land.game.render.animation.AnimationManager;
-import fight_land.game.render.collisions.ActionHit;
-import fight_land.game.render.collisions.HitDetector;
 import fight_land.game.render.graphics.Sprites;
 import fight_land.game.render.graphics.Texture;
 
@@ -201,8 +199,8 @@ public abstract class AnimationChampionManager extends AnimationManager {
 				this.setAnimationState(18);
 				this.animationRunning = new Animation(this.sprites.get(18), this.texture, 5);
 				this.animationRunning.start();
-				Point end = new Point((XExplosion*this.game.getHP()) + this.texture.getLocation().getX(),
-						-(YExplosion*this.game.getHP()) + this.texture.getLocation().getY());
+				Point end = new Point((XExplosion * this.game.getHP()) + this.texture.getLocation().getX(),
+						-(YExplosion * this.game.getHP()) + this.texture.getLocation().getY());
 
 				double distanceEndPointToActual = Math.sqrt(((end.getX() - this.texture.getLocation().getX())
 						* (end.getX() - this.texture.getLocation().getX()))
@@ -210,7 +208,7 @@ public abstract class AnimationChampionManager extends AnimationManager {
 
 				System.out.println("distance : " + distanceEndPointToActual);
 				this.render.contentThread(this.texture, end.getX(), end.getY(),
-						(int) (300 * ((distanceEndPointToActual/this.game.getHP()) / 600)), false);
+						(int) (300 * ((distanceEndPointToActual / this.game.getHP()) / 600)), false);
 				this.addBoostY = true;
 				this.canMoveY = true;
 				this.canMoveX = true;
@@ -223,8 +221,8 @@ public abstract class AnimationChampionManager extends AnimationManager {
 				this.setAnimationState(19);
 				this.animationRunning = new Animation(this.sprites.get(19), this.texture, 5);
 				this.animationRunning.start();
-				Point end = new Point((-(XExplosion*this.game.getHP())) + this.texture.getLocation().getX(),
-						-(YExplosion*this.game.getHP()) + this.texture.getLocation().getY());
+				Point end = new Point((-(XExplosion * this.game.getHP())) + this.texture.getLocation().getX(),
+						-(YExplosion * this.game.getHP()) + this.texture.getLocation().getY());
 
 				double distanceEndPointToActual = Math.sqrt(((end.getX() - this.texture.getLocation().getX())
 						* (end.getX() - this.texture.getLocation().getX()))
@@ -232,7 +230,7 @@ public abstract class AnimationChampionManager extends AnimationManager {
 
 				System.out.println("distance : " + distanceEndPointToActual);
 				this.render.contentThread(this.texture, end.getX(), end.getY(),
-						(int) (300 * ((distanceEndPointToActual/(this.game.getHP())) / 600)), false);
+						(int) (300 * ((distanceEndPointToActual / (this.game.getHP())) / 600)), false);
 
 				System.out.println("x : " + end.getX() + " y : " + end.getY());
 				this.addBoostY = true;
@@ -253,15 +251,15 @@ public abstract class AnimationChampionManager extends AnimationManager {
 				this.sprites.get(nbTexture).getActualSprite().getHeight());
 		this.texture.setImage(this.sprites.get(nbTexture).getActualSprite());
 	}
-	
+
 	public void setHP(float hp) {
 		this.game.setHP(hp);
 	}
-	
+
 	public float getHP() {
 		return this.game.getHP();
 	}
-	
+
 	public synchronized void startAnimationNumber(int AnimationState) {
 		super.stopActualAnimation();
 		switch (AnimationState) {
@@ -313,7 +311,7 @@ public abstract class AnimationChampionManager extends AnimationManager {
 		}
 	}
 
-	private synchronized void basicalAnimationOther(int number, int timer) {
+	protected synchronized void basicalAnimationOther(int number, int timer) {
 		this.setAnimationState(number);
 		resize(number);
 		this.sprites.get(number).resetSprite();

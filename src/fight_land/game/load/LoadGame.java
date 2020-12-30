@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
+import fight_land.game.Init;
 import fight_land.game.render.collisions.CollisionsDetector;
 import fight_land.game.render.graphics.Sprites;
 
@@ -160,6 +161,26 @@ public class LoadGame {
 		loaded++;
 
 		assets.setComonauteSprites(sprites);
+	}
+	
+	public void loadAll(ArrayList<Integer> nbAtLoad) {
+		ArrayList<Integer> nbAfter = new ArrayList<Integer>();
+
+		for (int i = 0; i < nbAtLoad.size(); i++) {// don't reapeat load
+			Boolean find = false;
+			for (int a = 0; a < nbAfter.size(); a++) {
+				if (nbAfter.get(a).intValue() == nbAtLoad.get(i).intValue()) {
+					find = true;
+				}
+			}
+			if (!find)
+				nbAfter.add(nbAtLoad.get(i));
+		}
+		
+		for (int i = 0; i < nbAfter.size(); i++)// load texture one by one
+			this.load(nbAfter.get(i).intValue());
+
+		this.setLoadFinish(true);
 	}
 
 	private void loadLavaMap() {

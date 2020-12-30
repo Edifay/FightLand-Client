@@ -32,6 +32,7 @@ public class Receiver {
 		}).start();
 	}
 
+	@SuppressWarnings("unchecked")
 	public void manageTCP() {
 		Long msStack = 0L;
 
@@ -45,30 +46,15 @@ public class Receiver {
 				break;
 			case 1: // get fich at Load
 
-				@SuppressWarnings("unchecked")
 				ArrayList<Integer> nbAtLoad = (ArrayList<Integer>) readDataByteToObject(pack.getData().get(0));
-				ArrayList<Integer> nbAfter = new ArrayList<Integer>();
-				for (int i = 0; i < nbAtLoad.size(); i++) {
-					Boolean find = false;
-					for (int a = 0; a < nbAfter.size(); a++) {
-						if (nbAfter.get(a).intValue() == nbAtLoad.get(i).intValue()) {
-							find = true;
-						}
-					}
-					if (!find)
-						nbAfter.add(nbAtLoad.get(i));
-
-				}
-				for (int i = 0; i < nbAfter.size(); i++)
-					Init.loader.load(nbAfter.get(i).intValue());
-
-				Init.loader.setLoadFinish(true);
+				new Thread(() -> {
+					Init.loader.loadAll((ArrayList<Integer>) nbAtLoad.clone());
+				}).start();
 				break;
 
 			case 2:
 				ArrayList<byte[]> bytes = pack.getData();
 				for (int i = 0; i < bytes.size(); i++) {
-					@SuppressWarnings("unchecked")
 					ArrayList<Object> playerInfo = (ArrayList<Object>) readDataByteToObject(bytes.get(i));
 
 					Init.game.getPlayers().add(new Player((Long) playerInfo.get(0), (Boolean) playerInfo.get(1),
@@ -99,7 +85,7 @@ public class Receiver {
 	public void manageUDP() {
 		Packet pack;
 
-		Long msStack = 0L;
+		// Long msStack = 0L;
 
 		secureUDPPing();
 

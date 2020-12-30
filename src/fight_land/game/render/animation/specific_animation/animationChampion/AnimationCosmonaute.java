@@ -171,4 +171,79 @@ public class AnimationCosmonaute extends AnimationChampionManager {
 			}
 		}
 	}
+
+	public synchronized void startAnimationNumber(int AnimationState) {
+		super.stopActualAnimation();
+		switch (AnimationState) {
+		case 0:
+			basicalAnimationOther(AnimationState, 40);
+			break;
+		case 1:
+			basicalAnimationOther(AnimationState, 40);
+			break;
+		case 2:
+			basicalAnimationOther(AnimationState, 25);
+			break;
+		case 3:
+			basicalAnimationOther(AnimationState, 25);
+			break;
+		case 4:
+			basicalAnimationOther(AnimationState, 5);
+			break;
+		case 5:
+			basicalAnimationOther(AnimationState, 5);
+			break;
+		case 6:
+			basicalAnimationOther(AnimationState, 3);
+			break;
+		case 7:
+			basicalAnimationOther(AnimationState, 3);
+			break;
+		case 8:
+			basicalAnimationOther(AnimationState, 9);
+			break;
+		case 9:
+			basicalAnimationOther(AnimationState, 9);
+			break;
+		case 10:
+			basicalAnimationOther(AnimationState, 6);
+			new Thread(() -> {
+				System.out.println("Starting new Texture for attack animation !");
+
+				Texture text = new Texture(true);
+				text.setLocation(this.texture.getLocation().getX() + 300, this.texture.getLocation().getY() + 50);
+				text.setSize(AssetsContener.assets.getCosmonauteSprites().get(12).getActualSprite().getWidth(),
+						AssetsContener.assets.getCosmonauteSprites().get(12).getActualSprite().getWidth());
+				text.setImage(AssetsContener.assets.getCosmonauteSprites().get(12).getActualSprite());
+
+				System.out.println("Affichage de la texture à x : " + text.getLocation().getX() + " y : "
+						+ text.getLocation().getY());
+				Animation anim = new Animation(AssetsContener.assets.getCosmonauteSprites().get(12).clone(), text, 10);
+
+				fight_land.game.Init.render.addTexture(text);
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				anim.start();
+				System.out.println("start");
+				anim.stop();
+				fight_land.game.Init.render.remove(text);
+			}).start();
+			break;
+		case 11:
+			basicalAnimationOther(AnimationState, 6);
+			break;
+		case 14:
+			basicalAnimationOther(AnimationState, 15);
+			break;
+		case 15:
+			basicalAnimationOther(AnimationState, 15);
+			break;
+
+		default:
+			break;
+		}
+	}
 }
