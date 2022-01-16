@@ -1,6 +1,7 @@
 # Fight_Land
 
-Est un jeu de plateforme **multijoueur en réseau** le projet du serveur est trouvable ici :
+Côté Client:
+  Fight_Land est un jeu de plateforme **multijoueur en réseau** le projet du serveur est trouvable ici :
 https://github.com/Edifay/FightLand_Server
 
 
